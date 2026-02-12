@@ -1,5 +1,4 @@
-
-import 'dart:io';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -120,26 +119,6 @@ class ApiClient {
     }
   }
 
-  /// Generic PATCH request handler
-  Future<ApiResponse<T>> patch<T>(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  }) async {
-    try {
-      final response = await _dio.patch(
-        endpoint,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(headers: headers),
-      );
-      return _handleResponse<T>(response);
-    } catch (e) {
-      return _handleError<T>(e);
-    }
-  }
-
   /// Generic DELETE request handler
   Future<ApiResponse<T>> delete<T>(
     String endpoint, {
@@ -160,45 +139,40 @@ class ApiClient {
     }
   }
 
-  /// Upload file with multipart/form-data
-  Future<ApiResponse<T>> uploadFile<T>(
-    String endpoint, {
-    required File file,
-    required String fieldName,
-    Map<String, dynamic>? additionalData,
-    ProgressCallback? onSendProgress,
+  /// Helper to send a rating for a film. Pass the full endpoint path.
+  Future<ApiResponse<T>> sendRating<T>(
+    String endpoint,
+    double rating, {
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extraFields,
   }) async {
-    try {
-      final fileName = file.path.split('/').last;
-      final formData = FormData.fromMap({
-        fieldName: await MultipartFile.fromFile(
-          file.path,
-          filename: fileName,
-        ),
-        ...?additionalData,
-      });
-
-      final response = await _dio.post(
-        endpoint,
-        data: formData,
-        options: Options(
-          headers: {'Content-Type': 'multipart/form-data'},
-        ),
-        onSendProgress: onSendProgress,
-      );
-
-      return _handleResponse<T>(response);
-    } catch (e) {
-      return _handleError<T>(e);
-    }
+    final payload = <String, dynamic>{'rating': rating};
+    if (extraFields != null) payload.addAll(extraFields);
+    return post<T>(endpoint, data: payload, headers: headers);
   }
 
   /// Handle successful response
   ApiResponse<T> _handleResponse<T>(Response response) {
+    String? message;
+
+    try {
+      if (response.data is Map && (response.data as Map).containsKey('message')) {
+        message = (response.data as Map)['message']?.toString();
+      } else if (response.statusMessage != null && response.statusMessage!.isNotEmpty) {
+        message = response.statusMessage;
+      } else {
+        message = 'Success';
+      }
+    } catch (_) {
+      message = response.statusMessage ?? 'Success';
+    }
+
+    final dynamic respData = response.data;
+
     return ApiResponse<T>(
       success: true,
-      message: response.data['message'] ?? 'Success',
-      data: response.data as T?,
+      message: message,
+      data: respData as T?,
       statusCode: response.statusCode,
     );
   }
@@ -217,9 +191,22 @@ class ApiClient {
           );
 
         case DioExceptionType.badResponse:
+          String? serverMessage;
+          try {
+            final d = error.response?.data;
+            log(d.toString());
+            if (d is Map && d.containsKey('message')) {
+              serverMessage = d['message']?.toString();
+            } else if (d is String) {
+              serverMessage = d;
+            }
+          } catch (_) {
+            serverMessage = null;
+          }
+
           return ApiResponse<T>(
             success: false,
-            message: error.response?.data['message'] ?? 'Server error occurred',
+            message: serverMessage ?? 'Server error occurred',
             statusCode: error.response?.statusCode,
           );
 
