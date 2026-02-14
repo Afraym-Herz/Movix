@@ -14,14 +14,12 @@ class AuthService {
     };
 
     try {
-      // STEP 1: Get Request Token
       final tokenResponse = await http.get(
         Uri.parse('$_baseUrl/authentication/token/new'),
         headers: headers,
       );
       final requestToken = jsonDecode(tokenResponse.body)['request_token'];
 
-      // STEP 2: Validate Request Token with Login
       final loginResponse = await http.post(
         Uri.parse('$_baseUrl/authentication/token/validate_with_login'),
         headers: headers,
@@ -35,8 +33,6 @@ class AuthService {
       if (jsonDecode(loginResponse.body)['success'] != true) {
         throw Exception("Login failed: Invalid username or password");
       }
-
-      // STEP 3: Create Session ID
       final sessionResponse = await http.post(
         Uri.parse('$_baseUrl/authentication/session/new'),
         headers: headers,
@@ -44,8 +40,6 @@ class AuthService {
       );
 
       final sessionId = jsonDecode(sessionResponse.body)['session_id'];
-      
-      // Save session ID locally
       await _saveSessionId(sessionId);
       
       return sessionId;
@@ -58,26 +52,20 @@ class AuthService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final sessionId = prefs.getString('session_id');
-      
       if (sessionId != null) {
         final headers = {
           'Authorization': 'Bearer $_token',
           'Content-Type': 'application/json',
           'accept': 'application/json',
         };
-
-        // Delete session on TMDB
         await http.delete(
           Uri.parse('$_baseUrl/authentication/session'),
           headers: headers,
           body: jsonEncode({'session_id': sessionId}),
         );
       }
-      
-      // Remove local session
       await _clearSessionId();
     } catch (e) {
-      // Still clear local session even if API call fails
       await _clearSessionId();
       throw Exception("Error during logout: $e");
     }
