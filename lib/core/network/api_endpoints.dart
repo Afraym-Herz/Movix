@@ -16,6 +16,12 @@ class ApiEndpoints {
   
   /// GET — Top rated movies. Query: api_key, language, page.
   static const String topRated = '/3/movie/top_rated';
+
+  static const String popular = '/3/movie/popular';
+
+    static const String trending = '/3/movie/trending';
+
+    static String searchMovies = '/3/trending/movie/${DateTime.now().day}';
   
   /// GET — Movie details by ID. Query: api_key, language.
   static String movieDetails(int movieId) => '/3/movie/$movieId';

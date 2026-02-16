@@ -14,6 +14,10 @@ class Assets {
   /// assets/images/confirm_image.png
   static const String imagesConfirmImage = "assets/images/confirm_image.png";
 
+  /// Assets for imagesLightRedBackgroundImage
+  /// assets/images/light_red_background_image.png
+  static const String imagesLightRedBackgroundImage = "assets/images/light_red_background_image.png";
+
   /// Assets for imagesLogo
   /// assets/images/logo.png
   static const String imagesLogo = "assets/images/logo.png";
