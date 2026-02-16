@@ -4,17 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/utils/assets.dart';
+import 'package:movix/core/utils/debouncer.dart';
 import 'package:movix/features/auth/screens/widgets/identifiy_and_secur_text_container.dart';
 import 'package:movix/features/auth/screens/widgets/or_divider_row.dart';
 import 'package:movix/features/auth/screens/widgets/custom_auth_button.dart';
 import 'package:movix/features/auth/screens/widgets/custom_password_from_field.dart';
 import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
 import 'package:movix/features/auth/screens/widgets/sign_up_container.dart';
-import 'package:movix/features/home/screens/top_rated_movies_screen.dart';
+import 'package:movix/features/main_layout.dart';
 
-class LoginScreenBody extends StatelessWidget {
+class LoginScreenBody extends StatefulWidget {
   const LoginScreenBody({super.key});
 
+  @override
+  State<LoginScreenBody> createState() => _LoginScreenBodyState();
+}
+
+class _LoginScreenBodyState extends State<LoginScreenBody> {
+  final Debouncer debouncer = Debouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,9 @@ class LoginScreenBody extends StatelessWidget {
                       labelText: 'EMAIL ADDRESS',
                       hintText: "Enter your email",
                       onSaved: (value) {},
+                      onChanged: (value) {
+                        debouncer.onSearchChanged(value);
+                      },
                       fieldType: FieldType.email,
                       textInputAction: TextInputAction.done,
                     ),
@@ -61,7 +71,7 @@ class LoginScreenBody extends StatelessWidget {
                     const SizedBox(height: 20),
                     CustomAuthButton(text: 'LogIn', onPressed: () {
                       log('login');
-                      Navigator.pushNamed(context, TopRatedMoviesScreen.routeName);
+                      Navigator.pushNamed(context, MainLayout.routeName);
                       
                     }),
                   ],

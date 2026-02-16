@@ -12,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.labelText,
     required this.hintText,
     required this.onSaved,
+    required this.onChanged,
     required this.fieldType,
     this.focusNode,
     required this.textInputAction,
@@ -26,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputAction textInputAction;
   final void Function(String)? onFieldSubmitted;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class CustomTextFormField extends StatelessWidget {
               fieldType: fieldType,
             );
           },
-
+          onChanged: onChanged ,
           onSaved: onSaved,
           decoration: InputDecoration(
             fillColor: const Color(0xff121212),
