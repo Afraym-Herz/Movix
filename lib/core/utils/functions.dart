@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
 
 double getScaleFactor(BuildContext context) {
@@ -104,3 +105,21 @@ Route<dynamic> buildCinematicRoute(Widget page) {
     },
   );
 }
+
+
+  AppBar buildAppBarScreens(BuildContext context , {required String title}) {
+    return AppBar(
+        leading:  IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        title:  Text(title , style: const TextStyle(color: Colors.white),),
+        backgroundColor: AppColors.lightRedBackground,
+        
+      );
+  }
+

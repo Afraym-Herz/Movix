@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:movix/core/network/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String _baseUrl = 'https://api.themoviedb.org/3';
-  final String _token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYjc4NDI1OWY1NGI4MTJiMjE4MjkzZjdlMTljZmI1OCIsIm5iZiI6MTc3MDc1Nzc4MS41NjA5OTk5LCJzdWIiOiI2OThiOWU5NTM5ZTE5N2QwZjMxZTY2MjAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.eK3t9F0o6HFHAk7jLWmzxIUHzrwAuWUX78y7wJD7asA';
+  final String _baseUrl = ApiEndpoints.baseUrl;
+  final String _token = ApiEndpoints.apiReadAccessToken;
 
   Future<String?> login(String username, String password) async {
     final headers = {
