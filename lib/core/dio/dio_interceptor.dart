@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 
@@ -7,6 +10,8 @@ import 'package:movix/core/network/api_endpoints.dart';
 class DioInterceptor extends Interceptor {
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
+  bool _isRefreshing = false;
+  Completer <String?>? _refreshCompleter;
 
   final Dio dio;
   final FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -22,12 +27,10 @@ class DioInterceptor extends Interceptor {
     options.headers['Accept'] = 'application/json';
 
     final storedToken = await storage.read(key: _accessTokenKey);
-    final token = storedToken?.isNotEmpty == true
-        ? storedToken
-        : (ApiEndpoints.apiKey.isNotEmpty ? ApiEndpoints.apiReadAccessToken : null);
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
-    }
+    
+  if (storedToken != null && storedToken.isNotEmpty) {
+    options.headers['Authorization'] = 'Bearer $storedToken';
+  }
 
     handler.next(options);
   }
@@ -61,15 +64,38 @@ class DioInterceptor extends Interceptor {
   }
 
   Future<String?> _refreshToken() async {
-    final refreshToken = await storage.read(key: _refreshTokenKey);
+    if (_isRefreshing) {
+      return _refreshCompleter?.future;
+    } else {
+      _isRefreshing = true;
+      _refreshCompleter = Completer<String?>();
+      try {
+        final newToken = await performTokenRefresh();
+        _refreshCompleter?.complete(newToken);
+        return newToken;
+      } catch (e) {
+        _refreshCompleter?.completeError(e);
+        rethrow;
+      } finally {
+        _isRefreshing = false;
+      }
+    }    
+  }
+
+  Future<String?> performTokenRefresh() async {
+   final refreshToken = await storage.read(key: _refreshTokenKey);
     if (refreshToken == null) return null;
     try {
       final response = await dio.post(
         ApiEndpoints.refreshToken,
         options: Options(headers: {'Refresh-Token': refreshToken}),
       );
-      final data = response.data;
-      if (data is! Map) return null;
+
+      if (response.statusCode != 200 || response.data == null) return null;
+
+
+      final data = response.data as Map<String, dynamic>;
+
       final newAccessToken = data['accessToken'] as String?;
       final newRefreshToken = data['refreshToken'] as String?;
       if (newAccessToken != null) {
@@ -79,8 +105,9 @@ class DioInterceptor extends Interceptor {
         await storage.write(key: _refreshTokenKey, value: newRefreshToken);
       }
       return newAccessToken;
-    } catch (_) {
-      return null;
+    } on DioException catch (e) {
+      debugPrint('Refresh token failed: ${e.message}');
+    return null;
     }
   }
 
