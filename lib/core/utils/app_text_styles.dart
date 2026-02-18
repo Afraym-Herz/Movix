@@ -24,6 +24,13 @@ abstract class AppTextStyles {
     color: Colors.white
   );
 
+  static  TextStyle bold8 (BuildContext context) => TextStyle(
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.bold,
+    fontSize: getResponsiveFontSize(context, baseFontSize: 8) ,
+    color: Colors.white
+  );
+
   static  TextStyle bold20 (BuildContext context) => TextStyle(
     fontFamily: 'Poppins',
     fontWeight: FontWeight.bold,
