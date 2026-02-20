@@ -44,14 +44,14 @@ class ListViewMoviesScreens extends StatelessWidget {
                 width: cardWidth.toDouble(),
                 movie: movies[index],
                 onTap: () {
-                  log('Tapped movie: ${movies[index].title}');
+                  
                 },
               )
             : SmallMovieCard(
                 cardWidth: cardWidth.toDouble(),
                 movie: movies[index],
                 onTap: () {
-                  log('Tapped movie: ${movies[index].title}');
+                  
                 },
               );
       },
