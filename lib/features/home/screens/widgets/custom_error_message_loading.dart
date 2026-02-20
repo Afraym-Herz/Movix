@@ -29,6 +29,5 @@ class CustomErrorMessageLoading extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
