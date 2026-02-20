@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/features/home/screens/widgets/logo_box.dart';
+import 'package:movix/features/search/screens/search_screen.dart';
 
 class HeaderHomeScreen extends StatelessWidget {
   const HeaderHomeScreen({super.key});
@@ -34,7 +35,9 @@ class HeaderHomeScreen extends StatelessWidget {
           ),
           Row(
             children: [
-              Icon(Icons.search, color: Colors.grey[400]),
+              GestureDetector( onTap: () {
+                  Navigator.pushNamed(context, SearchScreen.routeName);
+              }, child: Icon(Icons.search, color: Colors.grey[400])),
               const SizedBox(width: 16),
               const CircleAvatar(
                 radius: 20,
