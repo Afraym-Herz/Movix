@@ -29,6 +29,9 @@ class ApiEndpoints {
   // ============== AUTHENTICATION ENDPOINTS ==============
   /// GET — Create new request token
   static const String requestToken = '/authentication/token/new';
+
+  /// POST — Search for a movie. Query: api_key, query, page.
+  static const String search = '/find/';
   
   /// POST — Validate request token with login
   static const String validateWithLogin = '/authentication/token/validate_with_login';

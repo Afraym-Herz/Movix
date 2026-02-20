@@ -3,7 +3,6 @@ import 'package:movix/core/network/api_client.dart';
 import 'package:movix/core/services/secure_storage.dart';
 import 'package:movix/features/auth/data/repo/auth_repo.dart';
 import 'package:movix/features/auth/data/repo/auth_repo_impl.dart';
-import 'package:movix/features/home/cubits/movie_cubit.dart';
 import 'package:movix/features/home/repositories/movie_repository.dart';
 import 'package:movix/features/profile/data/repo/profile_repo.dart';
 import 'package:movix/features/profile/data/repo/profile_repo_impl.dart';
@@ -42,7 +41,5 @@ void setupGetIt() {
     ProfileRepoImpl(apiClient: getIt<ApiClient>()),
   );
 
-  getIt.registerSingleton<MovieCubit>(
-     MovieCubit(MovieRepositoryImpl(ApiClient())),
-  );
+
 }

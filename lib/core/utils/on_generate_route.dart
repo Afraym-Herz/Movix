@@ -8,6 +8,7 @@ import 'package:movix/features/home/screens/top_rated_screen.dart';
 import 'package:movix/features/home/screens/trending_screen.dart';
 import 'package:movix/features/main_layout.dart';
 import 'package:movix/features/movie_details/screens/AImovie_details_screen.dart';
+import 'package:movix/features/search/screens/search_screen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -30,6 +31,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (context) => const AimovieDetailsScreen(),
         settings: settings,
       );
+    case SearchScreen.routeName:
+      return buildCinematicRoute(const SearchScreen());  
 
     default:
       return buildCinematicRoute(const LoginScreen());
