@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/movie_details/models/movie_details_model.dart';
 import 'package:movix/features/movie_details/repositories/movie_details_repository.dart';
-import 'package:movix/features/home/repositories/movie_repository.dart';
 
 part 'movie_details_state.dart';
 
@@ -21,7 +20,6 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     }
   }
 
-  /// Reset the state to initial
   void reset() {
     emit(const MovieDetailsState.initial());
   }
