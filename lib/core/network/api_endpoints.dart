@@ -26,6 +26,13 @@ class ApiEndpoints {
   /// GET — Movie details by ID. Query: api_key, language.
   static String movieDetails(int movieId) => '/movie/$movieId';
 
+  /// GET — Recommended movies. Query: api_key, language.
+  static String movieVideos(int movieId) => '/movie/$movieId/videos';
+
+  static String recommendations(int movieId) => '/movie/$movieId/recommendations';
+
+  static String discoverMovies(String sortBy) => '/discover/movie?include_adult=false&sort_by=$sortBy.desc';
+
   // ============== AUTHENTICATION ENDPOINTS ==============
   /// GET — Create new request token
   static const String requestToken = '/authentication/token/new';

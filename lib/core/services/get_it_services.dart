@@ -4,6 +4,7 @@ import 'package:movix/core/services/secure_storage.dart';
 import 'package:movix/features/auth/data/repo/auth_repo.dart';
 import 'package:movix/features/auth/data/repo/auth_repo_impl.dart';
 import 'package:movix/features/home/repositories/movie_repository.dart';
+import 'package:movix/features/movie_details/repositories/recommended_movies_repository.dart';
 import 'package:movix/features/profile/data/repo/profile_repo.dart';
 import 'package:movix/features/profile/data/repo/profile_repo_impl.dart';
 import 'package:movix/features/saved_movie/data/repo/saved_movie_repo.dart';
@@ -27,6 +28,10 @@ void setupGetIt() {
 
   getIt.registerSingleton<MovieRepository>(
     MovieRepositoryImpl(getIt<ApiClient>()),
+  );
+
+  getIt.registerSingleton<RecommendedMoviesRepository>(
+    RecommendedMoviesRepositoryImpl(getIt<ApiClient>()),
   );
 
   getIt.registerSingleton<SearchRepo>(

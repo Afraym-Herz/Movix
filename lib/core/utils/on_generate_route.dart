@@ -7,7 +7,8 @@ import 'package:movix/features/home/screens/popular_screen.dart';
 import 'package:movix/features/home/screens/top_rated_screen.dart';
 import 'package:movix/features/home/screens/trending_screen.dart';
 import 'package:movix/features/main_layout.dart';
-import 'package:movix/features/movie_details/screens/AImovie_details_screen.dart';
+import 'package:movix/features/movie_details/screens/movie_details_screen.dart';
+import 'package:movix/features/movie_details/screens/recommended_movies_screen.dart';
 import 'package:movix/features/search/screens/search_screen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -26,13 +27,18 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return buildCinematicRoute(const PopularMoviesScreen());
     case TopRatedMoviesScreen.routeName:
       return buildCinematicRoute(const TopRatedMoviesScreen());
-    case AimovieDetailsScreen.routeName:
+    case MovieDetailsScreen.routeName:
       return MaterialPageRoute(
-        builder: (context) => const AimovieDetailsScreen(),
+        builder: (context) => const MovieDetailsScreen(),
         settings: settings,
       );
     case SearchScreen.routeName:
       return buildCinematicRoute(const SearchScreen());  
+    case RecommendedMoviesScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) => RecommendedMoviesScreen(movieId: settings.arguments as int),
+        settings: settings,
+      );  
 
     default:
       return buildCinematicRoute(const LoginScreen());
