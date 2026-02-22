@@ -44,7 +44,7 @@ class _TrendingSectionState extends State<TrendingSection> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final double cardWidth = screenWidth > 600 ? 200 : screenWidth * 0.44;
+    final double cardWidth = screenWidth > 400 ? 200 : screenWidth * 0.44;
     final cardHeight = cardWidth * 1.5;
     return SectionWrapper(
       onSeeAllTap: () {
