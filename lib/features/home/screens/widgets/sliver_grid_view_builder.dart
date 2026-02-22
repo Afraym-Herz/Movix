@@ -20,7 +20,7 @@ class SliverGridViewBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverGrid.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: screenWidth > 600 ? 4 : 2,
+        crossAxisCount: screenWidth > 400 ? 4 : 2,
         crossAxisSpacing: 8,
         childAspectRatio: 0.55,
       ),

@@ -44,7 +44,7 @@ class _PopularSectionState extends State<PopularSection> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = screenWidth > 600 ? 200 : screenWidth * 0.36;
+    final cardWidth = screenWidth > 400 ? 200 : screenWidth * 0.36;
     final cardHeight = cardWidth * 1.5;
     return SectionWrapper(
       onSeeAllTap: () {

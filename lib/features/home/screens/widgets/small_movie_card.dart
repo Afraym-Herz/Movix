@@ -12,7 +12,6 @@ class SmallMovieCard extends StatelessWidget {
   final double? cardWidth;
   final Movie movie;
   final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
