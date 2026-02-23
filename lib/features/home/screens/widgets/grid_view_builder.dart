@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:movix/features/home/models/movie.dart';
 import 'package:movix/features/home/screens/widgets/small_movie_card.dart';
+import 'package:movix/features/movie_details/screens/movie_details_screen.dart';
 
-class SliverGridViewBuilder extends StatelessWidget {
-  const SliverGridViewBuilder({
+class GridViewBuilder extends StatelessWidget {
+  const GridViewBuilder({
     super.key,
     required this.screenWidth,
     required this.movies,
@@ -18,9 +17,9 @@ class SliverGridViewBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverGrid.builder(
+    return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: screenWidth > 400 ? 4 : 2,
+        crossAxisCount: screenWidth > 500 ? 4 : 2,
         crossAxisSpacing: 8,
         childAspectRatio: 0.55,
       ),
@@ -38,7 +37,11 @@ class SliverGridViewBuilder extends StatelessWidget {
         return SmallMovieCard(
           movie: movie,
           onTap: () {
-            log('Tapped movie: ${movie.title}');
+            Navigator.pushNamed(
+              context,
+              MovieDetailsScreen.routeName,
+              arguments: movie.id,
+            );
           },
         );
       },
