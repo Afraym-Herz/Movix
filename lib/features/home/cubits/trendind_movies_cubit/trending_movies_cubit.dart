@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/home/cubits/trendind_movies_cubit/trending_movies_states.dart';
-import 'package:movix/features/home/repositories/movie_repository.dart';
+import 'package:movix/core/repositories/movie_repository.dart';
 
 
 class TrendingMoviesCubit extends Cubit<TrendingMoviesStates> {
