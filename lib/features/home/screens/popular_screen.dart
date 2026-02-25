@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/features/home/cubits/popular_movies_cubit/popular_movies_cubit.dart';
 import 'package:movix/features/home/screens/widgets/sliver_app_bar.dart';
-import 'package:movix/features/home/screens/widgets/sliver_grid_view_builder.dart';
+import 'package:movix/features/home/screens/widgets/grid_view_builder.dart';
 
 import '../cubits/popular_movies_cubit/popular_movies_states.dart';
 
@@ -74,10 +74,12 @@ class _PopularMoviesScreenState extends State<PopularMoviesScreen> {
                 buildSliverAppBar(context, title: "Popular Movies"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-                SliverGridViewBuilder(
-                  screenWidth: screenWidth,
-                  movies: state.popularMovies,
-                  isLoading: state.popularIsLoading,
+                SliverToBoxAdapter(
+                  child: GridViewBuilder(
+                    screenWidth: screenWidth,
+                    movies: state.popularMovies,
+                    isLoading: state.popularIsLoading,
+                  ),
                 ),
               ],
             ),

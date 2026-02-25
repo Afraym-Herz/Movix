@@ -4,7 +4,7 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/features/home/cubits/top_rated_movies_cubit/top_rated_movies_cubit.dart';
 import 'package:movix/features/home/cubits/top_rated_movies_cubit/top_rated_movies_states.dart';
 import 'package:movix/features/home/screens/widgets/sliver_app_bar.dart';
-import 'package:movix/features/home/screens/widgets/sliver_grid_view_builder.dart';
+import 'package:movix/features/home/screens/widgets/grid_view_builder.dart';
 
 class TopRatedMoviesScreen extends StatefulWidget {
   const TopRatedMoviesScreen({super.key});
@@ -72,10 +72,12 @@ class _TopRatedMoviesScreenState extends State<TopRatedMoviesScreen> {
                 buildSliverAppBar(context, title: "Top Rated Movies"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
             
-                SliverGridViewBuilder(
-                  screenWidth: screenWidth,
-                  movies: state.topRatedMovies,
-                  isLoading: state.topRatedIsLoading,
+                SliverToBoxAdapter(
+                  child: GridViewBuilder(
+                    screenWidth: screenWidth,
+                    movies: state.topRatedMovies,
+                    isLoading: state.topRatedIsLoading,
+                  ),
                 ),
               ],
             ),

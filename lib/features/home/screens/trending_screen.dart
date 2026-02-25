@@ -4,7 +4,7 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/features/home/cubits/trendind_movies_cubit/trending_movies_cubit.dart';
 import 'package:movix/features/home/cubits/trendind_movies_cubit/trending_movies_states.dart';
 import 'package:movix/features/home/screens/widgets/sliver_app_bar.dart';
-import 'package:movix/features/home/screens/widgets/sliver_grid_view_builder.dart';
+import 'package:movix/features/home/screens/widgets/grid_view_builder.dart';
 
 class TrendingMoviesScreen extends StatefulWidget {
   const TrendingMoviesScreen({super.key});
@@ -74,10 +74,12 @@ class _TrendingMoviesScreenState extends State<TrendingMoviesScreen> {
                 buildSliverAppBar(context, title: "Trending Movies"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
             
-                SliverGridViewBuilder(
-                  screenWidth: screenWidth,
-                  movies: state.trendingMovies,
-                  isLoading: state.trendingIsLoading,
+                SliverToBoxAdapter(
+                  child: GridViewBuilder(
+                    screenWidth: screenWidth,
+                    movies: state.trendingMovies,
+                    isLoading: state.trendingIsLoading,
+                  ),
                 ),
               ],
             ),
