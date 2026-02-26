@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/features/explore/screens/explore_screen.dart';
-import 'package:movix/features/home/screens/movie_box_home_screen.dart';
-import 'package:movix/features/profile/screens/profile_screen.dart';
+import 'package:movix/features/movies_home/screens/movie_box_home_screen.dart';
 import 'package:movix/features/saved_movie/screens/saved_movie_screen.dart';
+import 'package:movix/features/tv_series_home/screens/tv_series_box_home_screen.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -25,9 +25,9 @@ class _MainLayoutState extends State<MainLayout> {
 
   List<Widget> pages = const [
     MovieBoxHomeScreen(),
+    TVSeriesBoxHomeScreen(),
     ExploreScreen(),
     SavedMovieScreen(),
-    ProfileScreen(),
   ];
 
   @override
@@ -50,6 +50,11 @@ class _MainLayoutState extends State<MainLayout> {
           label: "Home",
         ),
         NavigationDestination(
+          icon: Icon(Icons.tv_outlined),
+          selectedIcon: Icon(Icons.tv, color: AppColors.primary),
+          label: "TV series",
+        ),
+        NavigationDestination(
           icon: Icon(Icons.explore_outlined),
           selectedIcon: Icon(Icons.explore, color: AppColors.primary),
           label: "Explore",
@@ -58,11 +63,6 @@ class _MainLayoutState extends State<MainLayout> {
           icon: Icon(Icons.bookmark_outline),
           selectedIcon: Icon(Icons.bookmark, color: AppColors.primary),
           label: "Saved",
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person, color: AppColors.primary),
-          label: "Profile",
         ),
       ],
       animationDuration: const Duration(milliseconds: 500),
