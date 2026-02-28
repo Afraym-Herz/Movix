@@ -12,6 +12,7 @@ import 'package:movix/features/saved_movie/data/repo/saved_movie_repo.dart';
 import 'package:movix/features/saved_movie/data/repo/saved_movie_repo_impl.dart';
 import 'package:movix/features/search/data/repo/search_repo.dart';
 import 'package:movix/features/search/data/repo/search_repo_impl.dart';
+import 'package:movix/features/tv_series_details/repositories/tv_series_details_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -37,6 +38,10 @@ void setupGetIt() {
 
   getIt.registerSingleton<MovieDetailsRepository>(
     MovieDetailsRepositoryImpl(getIt<ApiClient>()),
+  );
+
+  getIt.registerSingleton<TVSeriesDetailsRepository>(
+    TVSeriesDetailsRepositoryImpl(getIt<ApiClient>()),
   );
 
   getIt.registerSingleton<SearchRepo>(

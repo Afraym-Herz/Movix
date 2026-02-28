@@ -12,6 +12,8 @@ import 'package:movix/features/movie_details/screens/movie_details_screen.dart';
 import 'package:movix/features/movie_details/screens/recommended_movies_screen.dart';
 import 'package:movix/features/movies_home/screens/up_coming_movies_screen.dart';
 import 'package:movix/features/search/screens/search_screen.dart';
+import 'package:movix/features/tv_series_details/screens/recommended_tv_series_screen.dart';
+import 'package:movix/features/tv_series_details/screens/tv_series_details_screen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -35,16 +37,28 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         settings: settings,
       );
     case SearchScreen.routeName:
-      return buildCinematicRoute(const SearchScreen());  
+      return buildCinematicRoute(const SearchScreen());
     case RecommendedMoviesScreen.routeName:
       return MaterialPageRoute(
-        builder: (context) => RecommendedMoviesScreen(movieId: settings.arguments as int),
+        builder: (context) =>
+            RecommendedMoviesScreen(movieId: settings.arguments as int),
         settings: settings,
       );
     case UpComingMoviesScreen.routeName:
       return buildCinematicRoute(const UpComingMoviesScreen());
     case NowPlayingMoviesScreen.routeName:
-      return buildCinematicRoute(const NowPlayingMoviesScreen());  
+      return buildCinematicRoute(const NowPlayingMoviesScreen());
+    case RecommendedTVSeriesScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) =>
+            RecommendedTVSeriesScreen(tvSeriesId: settings.arguments as int),
+        settings: settings,
+      );
+    case TvSeriesDetailsScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const TvSeriesDetailsScreen(),
+        settings: settings,
+      );
 
     default:
       return buildCinematicRoute(const LoginScreen());
