@@ -37,6 +37,15 @@ class ApiEndpoints {
 
   static String discoverMovies(String sortBy) =>
       '/discover/movie?include_adult=false&sort_by=$sortBy.desc';
+  
+  static String ratingMovies(int movieId) =>
+      '/movie/$movieId/rating';
+  
+  static String ratingTvSeries(int tvId) =>
+      '/tv/$tvId/rating';
+
+
+    
 
   // ============== TV Series ENDPOINTS ==============
   static const String tvSeriesAiringToday = 'tv/airing_today';

@@ -3,14 +3,14 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/features/movie_details/models/movie_details_model.dart';
 
-class ProductionCompanies extends StatelessWidget {
-  const ProductionCompanies({super.key, required this.movieDetails});
+class ProductionCompaniesRowMovie extends StatelessWidget {
+  const ProductionCompaniesRowMovie({super.key, required this.movieDetailsModel});
 
-  final MovieDetailsModel movieDetails;
+  final MovieDetailsModel movieDetailsModel;
 
   @override
   Widget build(BuildContext context) {
-    if (movieDetails.productionCompanies.isEmpty) {
+    if (movieDetailsModel.productionCompanies.isEmpty) {
       return const SizedBox.shrink();
     }
     return Column(
@@ -32,7 +32,7 @@ class ProductionCompanies extends StatelessWidget {
           runSpacing: 8,
           alignment:  WrapAlignment.start,
           children: [
-            for (var company in movieDetails.productionCompanies)
+            for (var company in movieDetailsModel.productionCompanies)
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

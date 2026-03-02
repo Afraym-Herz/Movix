@@ -22,6 +22,8 @@ class ApiResponse<T> {
 /// Provides clean methods for all API operations
 class ApiClient {
   late final Dio _dio;
+  final String getContentType = 'application/json';
+  final String postContentType = 'application/json;charset=utf-8';
 
   ApiClient({String? token}) {
     _dio = Dio(
@@ -40,12 +42,14 @@ class ApiClient {
     // _dio.interceptors.add(ApiInterceptor(token: token));
 
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: false,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+          requestHeader: true,
+          responseHeader: false,
+        ),
+      );
     }
   }
 
@@ -140,15 +144,34 @@ class ApiClient {
   }
 
   /// Helper to send a rating for a film. Pass the full endpoint path.
-  Future<ApiResponse<T>> sendRating<T>(
-    String endpoint,
+  Future<ApiResponse<T>> sendMovieRating<T>(
+    int movieId,
     double rating, {
     Map<String, dynamic>? headers,
-    Map<String, dynamic>? extraFields,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final payload = <String, dynamic>{'rating': rating};
-    if (extraFields != null) payload.addAll(extraFields);
-    return post<T>(endpoint, data: payload, headers: headers);
+    final data = <String, dynamic>{'value': rating};
+    return post<T>(
+      ApiEndpoints.ratingMovies(movieId),
+      data: data,
+      headers: {'Content-Type': postContentType, ...?headers},
+      queryParameters: queryParameters,
+    );
+  }
+
+  Future<ApiResponse<T>> sendTvSeriesRating<T>(
+    int tvSerieId,
+    double rating, {
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    final data = <String, dynamic>{'value': 2*rating};
+    return post<T>(
+      ApiEndpoints.ratingTvSeries(tvSerieId),
+      data: data,
+      headers: {'Content-Type': postContentType, ...?headers},
+      queryParameters: queryParameters,
+    );
   }
 
   /// Handle successful response
@@ -156,9 +179,11 @@ class ApiClient {
     String? message;
 
     try {
-      if (response.data is Map && (response.data as Map).containsKey('message')) {
+      if (response.data is Map &&
+          (response.data as Map).containsKey('message')) {
         message = (response.data as Map)['message']?.toString();
-      } else if (response.statusMessage != null && response.statusMessage!.isNotEmpty) {
+      } else if (response.statusMessage != null &&
+          response.statusMessage!.isNotEmpty) {
         message = response.statusMessage;
       } else {
         message = 'Success';
