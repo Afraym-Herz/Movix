@@ -21,6 +21,9 @@ class MovieDetailsState {
   const MovieDetailsState.error(String errorMessage)
       : this._(errorMessage: errorMessage);
 
+  
+
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
