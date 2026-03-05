@@ -4,5 +4,5 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required super.message});
+  const ServerFailure( {required super.message});
 }
