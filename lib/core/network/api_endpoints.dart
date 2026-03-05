@@ -13,6 +13,22 @@ class ApiEndpoints {
   /// Base URL for poster images (append poster_path from movie, e.g. /w500/path).
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p';
 
+  // ============== AUTHENTICATION ENDPOINTS ==============
+
+  /// GET — Create new request token
+  static const String requestToken = '/authentication/token/new';
+
+  static const String search = '/find/';
+
+  static const String validateWithLogin =
+      '/authentication/token/validate_with_login';
+
+  static const String createSession = '/authentication/session/new';
+
+  static String accountDetails(String sessionId) => '/account/$sessionId';
+
+  static const String logout = '/authentication/session';
+
   /// GET — Top rated movies. Query: api_key, language, page.
   static const String topRatedMovies = '/movie/top_rated';
 
@@ -23,7 +39,7 @@ class ApiEndpoints {
   static const String nowPlayingMovies = '/movie/now_playing';
 
   static const String upComingMovies = '/movie/upcoming';
-  
+
   static const String searchMovies = '/trending/movie/search';
 
   /// GET — Movie details by ID. Query: api_key, language.
@@ -37,15 +53,10 @@ class ApiEndpoints {
 
   static String discoverMovies(String sortBy) =>
       '/discover/movie?include_adult=false&sort_by=$sortBy.desc';
-  
-  static String ratingMovies(int movieId) =>
-      '/movie/$movieId/rating';
-  
-  static String ratingTvSeries(int tvId) =>
-      '/tv/$tvId/rating';
 
+  static String ratingMovies(int movieId) => '/movie/$movieId/rating';
 
-    
+  static String ratingTvSeries(int tvId) => '/tv/$tvId/rating';
 
   // ============== TV Series ENDPOINTS ==============
   static const String tvSeriesAiringToday = 'tv/airing_today';
@@ -60,38 +71,11 @@ class ApiEndpoints {
 
   static String tvSeriesDetails(int tvSeriesId) => '/tv/$tvSeriesId';
 
-  static String discoverTVSeries(String sortBy) => '/discover/tv?include_adult=false&sort_by=$sortBy.desc' ;
+  static String discoverTVSeries(String sortBy) =>
+      '/discover/tv?include_adult=false&sort_by=$sortBy.desc';
 
   static String recommendationsTVSeries(int tvSeriesId) =>
       '/tv/$tvSeriesId/recommendations';
 
   static const String tvSeriesLatest = '/tv/latest';
-
-
-
-
-  // ============== AUTHENTICATION ENDPOINTS ==============
-  /// GET — Create new request token
-  static const String requestToken = '/authentication/token/new';
-
-  /// POST — Search for a movie. Query: api_key, query, page.
-  static const String search = '/find/';
-
-  /// POST — Validate request token with login
-  static const String validateWithLogin =
-      '/authentication/token/validate_with_login';
-
-  /// POST — Create new session
-  static const String createSession = '/authentication/session/new';
-
-  /// DELETE — Delete session
-  static const String deleteSession = '/authentication/session';
-
-  // ============== AUTH ENDPOINTS ==============
-  static const String register = '/api/auth/register';
-  static const String login = '/api/auth/login';
-  static const String logout = '/api/auth/logout';
-  static const String forgotPassword = '/api/auth/forgot-password';
-  static const String resetPassword = '/api/auth/reset-password';
-  static const String refreshToken = '/api/auth/refresh';
 }

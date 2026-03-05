@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:movix/core/dio/dio_interceptor.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 
 class ApiResponse<T> {
@@ -39,7 +40,7 @@ class ApiClient {
     );
 
     // Add interceptors
-    // _dio.interceptors.add(ApiInterceptor(token: token));
+    _dio.interceptors.add(DioInterceptor(dio: _dio));
 
     if (kDebugMode) {
       _dio.interceptors.add(
@@ -141,37 +142,6 @@ class ApiClient {
     } catch (e) {
       return _handleError<T>(e);
     }
-  }
-
-  /// Helper to send a rating for a film. Pass the full endpoint path.
-  Future<ApiResponse<T>> sendMovieRating<T>(
-    int movieId,
-    double rating, {
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParameters,
-  }) async {
-    final data = <String, dynamic>{'value': rating};
-    return post<T>(
-      ApiEndpoints.ratingMovies(movieId),
-      data: data,
-      headers: {'Content-Type': postContentType, ...?headers},
-      queryParameters: queryParameters,
-    );
-  }
-
-  Future<ApiResponse<T>> sendTvSeriesRating<T>(
-    int tvSerieId,
-    double rating, {
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParameters,
-  }) async {
-    final data = <String, dynamic>{'value': 2*rating};
-    return post<T>(
-      ApiEndpoints.ratingTvSeries(tvSerieId),
-      data: data,
-      headers: {'Content-Type': postContentType, ...?headers},
-      queryParameters: queryParameters,
-    );
   }
 
   /// Handle successful response
