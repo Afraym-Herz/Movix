@@ -3,31 +3,29 @@ import 'package:movix/core/failure/failure.dart';
 import 'package:movix/features/auth/data/models/user_model.dart';
 
 abstract class AuthRepo {
-
-  Future<Either<Failure, UserModel>> signInWithEmailAndPassword({
+  Future<Either<Failure, String>> getRequestToken();
+  
+  Future<Either<Failure, void>> validateWithLogin({
     required String email,
     required String password,
   });
 
-  Future<Either<Failure, String>> refreshToken();
+  Future<Either<Failure, String>> getSessionId();
 
-  Future<Either<Failure, Unit>> logout({required String uId});
+  Future<Either<Failure, UserModel>> getAccountDetails({required String sessionId});
 
-  Future<Either<Failure, String>> resetPassword({
+  
+
+  Future<Either<Failure, UserModel>> logIn({
     required String email,
-    required String newPassword,
-    required String refreshToken,
+    required String password,
   });
 
-  Future<Either<Failure, String>> forgetPassword({required String email});
+  Future<Either<Failure, void>> logout({required String uId});
 
   Future<Either<Failure, UserModel>> getUserData({required String userId});
 
   Future saveUserData({required UserModel user});
 
   Future<bool> isAuthenticated();
-
-  Future<Either<void, String>> getUserIdFromStorage();
-
-  Future setUserId(String userId);
 }

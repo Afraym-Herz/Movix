@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:movix/core/failure/failure.dart';
@@ -13,35 +14,155 @@ class AuthRepoImpl extends AuthRepo {
 
   AuthRepoImpl({required this.apiClient, required this.secureStorage});
 
- 
+  @override
+  Future<Either<Failure, String>> getRequestToken() async {
+    try {
+      final response = await apiClient.get(ApiEndpoints.requestToken);
+
+      if (!response.success) {
+        return const Left(ServerFailure(message: 'Failed to request token'));
+      } else if (response.statusCode == 401) {
+        return const Left(ServerFailure(message: 'Request token expired'));
+      }
+
+      final String newToken = response.data['request_token'];
+      await secureStorage.setUserRequestToken(newToken);
+      log('new token: $newToken');
+      return Right(newToken);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 
   @override
-  Future<Either<Failure, UserModel>> signInWithEmailAndPassword({
+  Future<Either<Failure, void>> validateWithLogin({
     required String email,
     required String password,
   }) async {
     try {
       var response = await apiClient.post(
-        ApiEndpoints.login,
-        data: {'email': email, 'password': password},
+        ApiEndpoints.validateWithLogin,
+        data: {
+          'username': email,
+          'password': password,
+          'request_token': await secureStorage.getUserRequestToken(),
+        },
       );
 
       var data = response.data;
-      final UserModel userModel = UserModel(
-        id: data["user"]["id"],
-        name: data["user"]["name"],
-        email: data["user"]["email"],
+      final String requestToken = data['request_token'];
+
+      await secureStorage.setUserRequestToken(requestToken);
+
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getSessionId() async {
+    try {
+      final response = await apiClient.post(
+        ApiEndpoints.createSession,
+        data: {'request_token':  await secureStorage.getUserRequestToken()},
       );
 
-      await secureStorage.writeUserData(
-        key: userModel.id,
-        userModel: userModel,
+      if (!response.success) {
+        return const Left(ServerFailure(message: 'Failed to create session'));
+      } else if (response.statusCode == 401) {
+        return const Left(ServerFailure(message: 'create session expired'));
+      }
+
+      final String sessionId = response.data['session_id'];
+
+      await secureStorage.setUserSessionId(sessionId);
+
+      return Right(sessionId);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> getAccountDetails({
+    required String sessionId,
+  }) async {
+    try {
+      final response = await apiClient.get(
+        ApiEndpoints.accountDetails(sessionId),
+        queryParameters: {'session_id': sessionId},
       );
 
-      await secureStorage.setAccessToken(data['accessToken']);
-      await secureStorage.setRefreshToken(data['refreshToken']);
+      if (!response.success) {
+        return const Left(
+          ServerFailure(message: 'Failed to get account details'),
+        );
+      } else if (response.statusCode == 401) {
+        return const Left(
+          ServerFailure(message: 'get account details expired'),
+        );
+      }
 
-      return Right(userModel);
+      final UserModel user = UserModel.fromJson(response.data);
+      return Right(user);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> logIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      // Step 1: Get Request Token
+      final tokenResult = await getRequestToken();
+      if (tokenResult.isLeft()) {
+        return Left(
+          tokenResult.fold(
+            (f) => f,
+            (_) => const ServerFailure(message: 'request token error'),
+          ),
+        );
+      }
+
+      // Step 2: Validate With Login
+      final validateResult = await validateWithLogin(
+        email: email,
+        password: password,
+
+      );
+      if (validateResult.isLeft()) {
+        return Left(
+          validateResult.fold(
+            (f) => f,
+            (_) => const ServerFailure(message: 'validate with login error'),
+          ),
+        );
+      }
+
+      // Step 3: Create Session
+      final sessionResult = await getSessionId();
+      if (sessionResult.isLeft()) {
+        return Left(
+          sessionResult.fold(
+            (f) => f,
+            (_) => const ServerFailure(message: 'create session error'),
+          ),
+        );
+      }
+
+      // Step 4: Get Account Details
+      final sessionId = sessionResult.getOrElse(() => '');
+      final accountResult = await getAccountDetails(sessionId: sessionId.toString());
+
+      return accountResult.fold((failure) => Left(failure), (user) async {
+         await secureStorage.writeUserData(userModel: user);
+         await secureStorage.setUserId(user.id.toString());
+        return Right(user);
+      });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
@@ -52,7 +173,7 @@ class AuthRepoImpl extends AuthRepo {
     required String userId,
   }) async {
     try {
-      var response = await secureStorage.readUserData(uId: userId);
+      var response = await secureStorage.readUserData();
 
       if (response != null) {
         return Right(UserModel.fromJson(response));
@@ -66,67 +187,25 @@ class AuthRepoImpl extends AuthRepo {
 
   @override
   Future saveUserData({required UserModel user}) async {
-    await secureStorage.writeUserData(key: user.id, userModel: user);
-  }
-
-  @override
-  Future<Either<Failure, String>> refreshToken() async {
-    try {
-      final response = await apiClient.post(ApiEndpoints.refreshToken);
-
-      if (!response.success) {
-        return const Left(ServerFailure(message: 'Failed to refresh token'));
-      } else if (response.statusCode == 401) {
-        return const Left(ServerFailure(message: 'Refresh token expired'));
-      }
-
-      final String newToken = response.data['accessToken'];
-      await secureStorage.setAccessToken(newToken);
-      await secureStorage.setRefreshToken(response.data['refreshToken']);
-
-      apiClient.updateToken(newToken);
-
-      return Right(newToken);
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> forgetPassword({
-    required String email,
-  }) async {
-    try {
-      final response = await apiClient.post(
-        ApiEndpoints.forgotPassword,
-        data: {'email': email},
-      );
-
-      if (!response.success) {
-        return Left(
-          ServerFailure(message: response.message ?? "Request failed"),
-        );
-      }
-
-      return Right(response.data['message']);
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
+    await secureStorage.writeUserData(userModel: user);
   }
 
   @override
   Future<Either<Failure, Unit>> logout({required String uId}) async {
     try {
-      final response = await apiClient.post(ApiEndpoints.logout);
+      final sessionId = await secureStorage.getUserSessionId();
+final response = await apiClient.delete(
+  ApiEndpoints.logout,
+  data: {'session_id': sessionId},
+);
       if (!response.success) {
         return Left(
           ServerFailure(message: response.message ?? "Logout failed"),
         );
       }
 
-      apiClient.removeToken();
       await secureStorage.clearTokens();
-      await secureStorage.deleteUserData(uId: uId);
+      await secureStorage.deleteUserData();
 
       return const Right(unit);
     } catch (e) {
@@ -135,57 +214,10 @@ class AuthRepoImpl extends AuthRepo {
   }
 
   @override
-  Future<Either<Failure, String>> resetPassword({
-    required String email,
-    required String newPassword,
-    required String refreshToken,
-  }) async {
-    try {
-      final response = await apiClient.post(
-        ApiEndpoints.resetPassword,
-        data: {
-          'email': email,
-          'newPassword': newPassword,
-          'token': refreshToken,
-        },
-      );
-
-      if (!response.success) {
-        return Left(
-          ServerFailure(message: response.message ?? "Reset password failed"),
-        );
-      }
-
-      return Right(response.data['message']);
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
-  }
-
-  @override
   Future<bool> isAuthenticated() async {
-    
+    final sessionUserVar = await secureStorage.getUserSessionId();
+    final requestTokenVar = await secureStorage.getUserRequestToken();
 
-    final accessTokenVar = await secureStorage.getAccessToken();
-    final refreshTokenVar = await secureStorage.getRefreshToken();
-
-    return (accessTokenVar != null &&
-        refreshTokenVar != null );
-  }
-  
-  @override
-  Future<Either<void, String>> getUserIdFromStorage() {
-    return secureStorage.getUserId().then((userId) {
-      if (userId != null) {
-        return Right(userId);
-      } else {
-        return const Left(null);
-      }
-    });
-  }
-  
-  @override
-  Future setUserId(String userId) {
-    return secureStorage.setUserId(userId);
+    return (sessionUserVar != null && requestTokenVar != null);
   }
 }
