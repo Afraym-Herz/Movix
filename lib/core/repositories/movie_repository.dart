@@ -5,19 +5,19 @@ import 'package:movix/core/network/api_client.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 
 abstract class MovieRepository {
-  Future<Either<MovieResponse, Failure>> getTopRatedMovies({required int page});
-  Future<Either<MovieResponse, Failure>> getPopularMovies({required int page});
-  Future<Either<MovieResponse, Failure>> getTrendingMovies({required int page});
-  Future<Either<MovieResponse, Failure>> getNowPlayingMovies({
+  Future<Either<Failure, MovieResponse>> getTopRatedMovies({required int page});
+  Future<Either<Failure, MovieResponse>> getPopularMovies({required int page});
+  Future<Either<Failure, MovieResponse>> getTrendingMovies({required int page});
+  Future<Either<Failure, MovieResponse>> getNowPlayingMovies({
     required int page,
   });
-  Future<Either<MovieResponse, Failure>> getUpComingMovies({required int page});
+  Future<Either<Failure, MovieResponse>> getUpComingMovies({required int page});
 
-  Future<Either<MovieResponse, Failure>> getRecommendedMovies({
+  Future<Either<Failure, MovieResponse>> getRecommendedMovies({
     required int movieId,
     required int page,
   });
-  Future<Either<MovieResponse, Failure>> exploreMethod({
+  Future<Either<Failure, MovieResponse>> exploreMethod({
     required String category,
     required int page,
   });
@@ -29,7 +29,7 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl(this._apiClient);
 
   @override
-  Future<Either<MovieResponse, Failure>> getTopRatedMovies({
+  Future<Either<Failure, MovieResponse>> getTopRatedMovies({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -42,9 +42,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load top rated movies',
         ),
@@ -53,7 +53,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> getPopularMovies({
+  Future<Either<Failure, MovieResponse>> getPopularMovies({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -66,9 +66,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load popular movies',
         ),
@@ -77,7 +77,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> getTrendingMovies({
+  Future<Either<Failure, MovieResponse>> getTrendingMovies({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -90,9 +90,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Trending movies',
         ),
@@ -101,7 +101,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> exploreMethod({
+  Future<Either<Failure, MovieResponse>> exploreMethod({
     required String category,
     required int page,
   }) async {
@@ -115,9 +115,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Explore movies',
         ),
@@ -126,7 +126,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> getRecommendedMovies({
+  Future<Either<Failure, MovieResponse>> getRecommendedMovies({
     required int movieId,
     required int page,
   }) async {
@@ -140,9 +140,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Recommended movies',
         ),
@@ -151,7 +151,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> getNowPlayingMovies({
+  Future<Either<Failure, MovieResponse>> getNowPlayingMovies({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -164,9 +164,9 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Now playing movies',
         ),
@@ -175,7 +175,7 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<MovieResponse, Failure>> getUpComingMovies({
+  Future<Either<Failure, MovieResponse>> getUpComingMovies({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -188,15 +188,13 @@ class MovieRepositoryImpl implements MovieRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(MovieResponse.fromJson(response.data!));
+      return Right(MovieResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Upcoming movies',
         ),
       );
     }
   }
-
-  
 }

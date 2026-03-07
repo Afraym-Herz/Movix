@@ -1,39 +1,33 @@
 import 'package:dartz/dartz.dart';
 import 'package:movix/core/failure/failure.dart';
-import 'package:movix/core/models/tv_series_model.dart';
 import 'package:movix/core/network/api_client.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 import 'package:movix/core/models/tv_series_response.dart';
 
 abstract class TVSeriesRepository {
-  Future<Either<TvSeriesResponse, Failure>> getTopRatedTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getTopRatedTVSeries({
     required int page,
   });
-  Future<Either<TvSeriesResponse, Failure>> getPopularTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getPopularTVSeries({
     required int page,
   });
-  Future<Either<TvSeriesResponse, Failure>> getAiringTodayTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getAiringTodayTVSeries({
     required int page,
   });
-  Future<Either<TvSeriesResponse, Failure>> getOnTheAirTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getOnTheAirTVSeries({
     required int page,
   });
-  Future<Either<TvSeriesResponse, Failure>> getLatestTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getLatestTVSeries({
     required int page,
   });
 
-  Future<Either<TvSeriesResponse, Failure>> getRecommendedTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getRecommendedTVSeries({
     required int tvSeriesId,
     required int page,
   });
-  Future<Either<TvSeriesResponse, Failure>> exploreMethod({
+  Future<Either<Failure, TvSeriesResponse>> exploreMethod({
     required String category,
     required int page,
-  });
-
-  Future<Either<String, Failure>> addTvSeriesRating({
-    required int tvSeriesId,
-    required double rating,
   });
 }
 
@@ -43,7 +37,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   TVSerieRepositoryImpl(this._apiClient);
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getTopRatedTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getTopRatedTVSeries({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -56,9 +50,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load top rated TV Series',
         ),
@@ -67,7 +61,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getPopularTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getPopularTVSeries({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -80,9 +74,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load popular Tv Series',
         ),
@@ -91,7 +85,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getAiringTodayTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getAiringTodayTVSeries({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -104,9 +98,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Airing today TV Series',
         ),
@@ -115,7 +109,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> exploreMethod({
+  Future<Either<Failure, TvSeriesResponse>> exploreMethod({
     required String category,
     required int page,
   }) async {
@@ -129,9 +123,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Explore TV Series',
         ),
@@ -140,7 +134,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getRecommendedTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getRecommendedTVSeries({
     required int tvSeriesId,
     required int page,
   }) async {
@@ -154,9 +148,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load Recommended TV Series',
         ),
@@ -165,7 +159,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getLatestTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getLatestTVSeries({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -178,9 +172,9 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load latest TV Series',
         ),
@@ -189,7 +183,7 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
   }
 
   @override
-  Future<Either<TvSeriesResponse, Failure>> getOnTheAirTVSeries({
+  Future<Either<Failure, TvSeriesResponse>> getOnTheAirTVSeries({
     required int page,
   }) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
@@ -202,29 +196,13 @@ class TVSerieRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Left(TvSeriesResponse.fromJson(response.data!));
+      return Right(TvSeriesResponse.fromJson(response.data!));
     } else {
-      return Right(
+      return Left(
         ServerFailure(
           message: response.message ?? 'Failed to load on the air TV Series',
         ),
       );
     }
-  }
-
-  @override
-  Future<Either<String, Failure>> addTvSeriesRating({
-    required int tvSeriesId,
-    required double rating,
-  }) async {
-    final respose = await _apiClient.sendMovieRating(tvSeriesId, rating);
-
-    if (respose.success) {
-      return Left(respose.data!['status_message']);
-    }
-
-    return Right(
-      ServerFailure(message: respose.message ?? 'Failed to add rating'),
-    );
   }
 }
