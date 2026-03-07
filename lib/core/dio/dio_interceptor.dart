@@ -9,7 +9,7 @@ class DioInterceptor extends Interceptor {
   
 
   final Dio dio;
-  final SecureStorage storage =  SecureStorage();
+   SecureStorage storage = const SecureStorage();
 
   DioInterceptor({required this.dio});
 

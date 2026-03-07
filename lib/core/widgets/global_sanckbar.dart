@@ -13,7 +13,6 @@ class GlobalSnackbar {
     final overlay = Overlay.maybeOf(context, rootOverlay: true);
     if (overlay == null) return;
 
-    // 3. Create the OverlayEntry
     _currentEntry = OverlayEntry(
       builder: (context) {
         return Positioned(
