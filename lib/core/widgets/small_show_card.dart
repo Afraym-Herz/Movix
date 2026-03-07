@@ -14,7 +14,7 @@ class SmallShowCard extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: SizedBox(
         width: cardWidth != null ? cardWidth! - 32 : null,

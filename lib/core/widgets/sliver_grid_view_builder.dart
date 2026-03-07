@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:movix/core/models/show.dart';
-import 'package:movix/core/widgets/small_movie_card.dart';
+import 'package:movix/core/widgets/small_show_card.dart';
 import 'package:movix/features/movie_details/screens/movie_details_screen.dart';
+import 'package:movix/features/tv_series_details/screens/tv_series_details_screen.dart';
 
 class SliverGridViewBuilder extends StatelessWidget {
-
   final double screenWidth;
-  final List<Show> shows;
+  final List<dynamic> shows;
   final bool isLoading;
+  final bool isMovies;
 
-  const SliverGridViewBuilder({super.key, required this.screenWidth, required this.shows, required this.isLoading});
+  const SliverGridViewBuilder({
+    super.key,
+    required this.screenWidth,
+    required this.shows,
+    required this.isLoading,
+    this.isMovies = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +35,14 @@ class SliverGridViewBuilder extends StatelessWidget {
             ),
           );
         }
-        final movie = shows[index];
-        return SmallMovieCard(
-          movie: movie,
+        final show = shows[index];
+        return SmallShowCard(
+          show: show,
           onTap: () {
             Navigator.pushNamed(
               context,
-              MovieDetailsScreen.routeName,
-              arguments: movie.id,
+              isMovies ? MovieDetailsScreen.routeName : TvSeriesDetailsScreen.routeName,
+              arguments: show.id,
             );
           },
         );

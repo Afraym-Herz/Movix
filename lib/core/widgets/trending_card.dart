@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
-import 'package:movix/core/models/show.dart';
+import 'package:movix/core/models/movie_model.dart';
 
 class TrendingCard extends StatelessWidget {
   const TrendingCard({
@@ -10,12 +10,12 @@ class TrendingCard extends StatelessWidget {
     required this.onTap,
   });
   final double width;
-  final Show movie;
+  final MovieModel movie;
   final Function() onTap;
 
   @override
     Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: SizedBox(
         width: width,
