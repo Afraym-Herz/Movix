@@ -5,13 +5,14 @@ import 'package:movix/core/widgets/logo_box.dart';
 import 'package:movix/features/search/screens/search_screen.dart';
 
 class HeaderHomeScreen extends StatelessWidget {
-  const HeaderHomeScreen({super.key});
+  const HeaderHomeScreen({super.key, required this.imageUrl, required this.userName});
+  final String imageUrl ;
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -35,13 +36,18 @@ class HeaderHomeScreen extends StatelessWidget {
           ),
           Row(
             children: [
-              GestureDetector( onTap: () {
+              InkWell(
+                onTap: (){
                   Navigator.pushNamed(context, SearchScreen.routeName);
-              }, child: Icon(Icons.search, color: Colors.grey[400])),
+                },
+                child: Icon(Icons.search, color: Colors.grey[400]),
+              ),
               const SizedBox(width: 16),
-              const CircleAvatar(
+              Text(userName, style: AppTextStyles.regular14(context).copyWith(color: Colors.grey[400]),),
+              const SizedBox(width: 8),
+              CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage("https://i.pravatar.cc/300"),
+                backgroundImage: NetworkImage(imageUrl),
               ),
             ],
           ),

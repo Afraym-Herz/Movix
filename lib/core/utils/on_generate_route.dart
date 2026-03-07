@@ -24,7 +24,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case MovieBoxHomeScreen.routeName:
       return buildCinematicRoute(const MovieBoxHomeScreen());
     case MainLayout.routeName:
-      return buildCinematicRoute(const MainLayout());
+      return MaterialPageRoute(
+        builder: (context) => const MainLayout(),
+        settings: settings,  
+      );
     case TrendingMoviesScreen.routeName:
       return buildCinematicRoute(const TrendingMoviesScreen());
     case PopularMoviesScreen.routeName:
