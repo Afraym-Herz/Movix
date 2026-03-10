@@ -19,7 +19,7 @@ final getIt = GetIt.instance;
 void setupGetIt() {
   getIt.registerSingleton<ApiClient>(ApiClient());
 
-  getIt.registerSingleton<SecureStorage>(SecureStorage());
+  getIt.registerSingleton<SecureStorage>(const SecureStorage());
 
   getIt.registerSingleton<AuthRepo>(
     AuthRepoImpl(
@@ -37,11 +37,11 @@ void setupGetIt() {
   );
 
   getIt.registerSingleton<MovieDetailsRepository>(
-    MovieDetailsRepositoryImpl(getIt<ApiClient>()),
+    MovieDetailsRepositoryImpl(getIt<ApiClient>() , getIt<SecureStorage>()),
   );
 
   getIt.registerSingleton<TVSeriesDetailsRepository>(
-    TVSeriesDetailsRepositoryImpl(getIt<ApiClient>()),
+    TVSeriesDetailsRepositoryImpl(getIt<ApiClient>() , getIt<SecureStorage>()),
   );
 
   getIt.registerSingleton<SearchRepo>(

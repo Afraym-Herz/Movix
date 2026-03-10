@@ -12,27 +12,23 @@ class SecureStorage {
   static const String _sessionIdKey = 'session_id';
   static const String _userIdKey = 'user_id';
   static const String _userDataKey = 'user_data';
-  static const String _userImageUrlKey = 'user_image_url';
 
   // ─── Request Token ───────────────────────────────
-  Future<String?> getUserRequestToken() => 
-      storage.read(key: _requestTokenKey);
+  Future<String?> getUserRequestToken() => storage.read(key: _requestTokenKey);
 
-  Future<void> setUserRequestToken(String token) => 
+  Future<void> setUserRequestToken(String token) =>
       storage.write(key: _requestTokenKey, value: token);
 
   // ─── Session ID ──────────────────────────────────
-  Future<String?> getUserSessionId() => 
-      storage.read(key: _sessionIdKey);
+  Future<String?> getUserSessionId() => storage.read(key: _sessionIdKey);
 
-  Future<void> setUserSessionId(String sessionId) => 
+  Future<void> setUserSessionId(String sessionId) =>
       storage.write(key: _sessionIdKey, value: sessionId);
 
   // ─── User ID ─────────────────────────────────────
-  Future<String?> getUserId() => 
-      storage.read(key: _userIdKey);
+  Future<String?> getUserId() => storage.read(key: _userIdKey);
 
-  Future<void> setUserId(String userId) => 
+  Future<void> setUserId(String userId) =>
       storage.write(key: _userIdKey, value: userId);
 
   // ─── User Data ───────────────────────────────────
@@ -51,12 +47,33 @@ class SecureStorage {
   }
 
   Future<String> getUserImageUrl() async {
-    final data = await readUserData() ;
+    final data = await readUserData();
     if (data == null) return "";
     final usermodel = UserModel.fromJson(data);
-    return usermodel.avatarPath! ;
-  
-    }
+    return usermodel.avatarPath!;
+  }
+
+  Future<void> setUserRatingMovie(int movieId, double rateValue) async =>
+     await storage.write(key: 'movie_rating_$movieId', value: rateValue.toString());
+
+  Future<String?> getUserRatingMovie(int movieId) async {
+    return storage.read(key: 'movie_rating_$movieId');
+  }
+
+  Future<void> deleteUserRatingMovie(int movieId) async {
+    await storage.delete(key: 'movie_rating_$movieId');
+  }
+
+  Future<void> setUserRatingTVSeries(int tvSeriesId, double rateValue) async =>
+     await storage.write(key: 'tvSeries_rating_$tvSeriesId', value: rateValue.toString());
+
+  Future<String?> getUserRatingTVSeries(int tvSeriesId) async {
+    return storage.read(key: 'tvSeries_rating_$tvSeriesId');
+  }
+
+  Future<void> deleteUserRatingTVSeries(int tvSeriesId) async {
+    await storage.delete(key: 'tvSeries_rating_$tvSeriesId');
+  }
 
   Future<void> deleteUserData() async {
     await storage.delete(key: _userDataKey);
