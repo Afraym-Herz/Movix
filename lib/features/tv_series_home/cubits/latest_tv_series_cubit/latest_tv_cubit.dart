@@ -32,19 +32,19 @@ class LatestTVSeriesCubit extends Cubit<LatestTVSeriesStates> {
    final response = await _tvSeriesRepository.getLatestTVSeries(
       page: _latestTVSeriesCurrentPage,
     );
-    response.fold((l) {
+    response.fold((l)=> emit(state.copyWith(errorMessage: l.message)) , (r){
       final latestTVSeries = refresh
-          ? l.results
-          : [...state.latestTVSeries, ...l.results];
+          ? r.results
+          : [...state.latestTVSeries, ...r.results];
       emit(
         state.copyWith(
           latestTVSeries: latestTVSeries,
           latestTVSeriesIsLoading: false,
-          latestTVSeriesHasReachedMax: _latestTVSeriesCurrentPage >= l.totalPages,
+          latestTVSeriesHasReachedMax: _latestTVSeriesCurrentPage >= r.totalPages,
           errorMessage: null,
         ),
       );
       _latestTVSeriesCurrentPage++;
-    }, (r) => emit(state.copyWith(errorMessage: r.message)));
+    } );
   }
 }

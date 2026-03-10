@@ -32,19 +32,19 @@ class AiringTVSeriesCubit extends Cubit<AiringTodayTVSeriesStates> {
    final response = await _tvSeriesRepository.getAiringTodayTVSeries(
       page: _airingTodayCurrentPage,
     );
-    response.fold((l) {
+    response.fold((l)=> emit(state.copyWith(errorMessage: l.message)) , (r){
       final airingTodayTVSeries = refresh
-          ? l.results
-          : [...state.airingTodayTVSeries, ...l.results];
+          ? r.results
+          : [...state.airingTodayTVSeries, ...r.results];
       emit(
         state.copyWith(
           airingTodayTVSeries: airingTodayTVSeries,
           airingTodayIsLoading: false,
-          airingTodayHasReachedMax: _airingTodayCurrentPage >= l.totalPages,
+          airingTodayHasReachedMax: _airingTodayCurrentPage >= r.totalPages,
           errorMessage: null,
         ),
       );
       _airingTodayCurrentPage++;
-    }, (r) => emit(state.copyWith(errorMessage: r.message)));
+    } );
   }
 }
