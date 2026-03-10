@@ -32,19 +32,19 @@ class OnTheAirTvSeriesCubit extends Cubit<OnTheAirTvSeriesStates> {
    final response = await _tvSeriesRepository.getOnTheAirTVSeries(
       page: _onTheAirCurrentPage,
     );
-    response.fold((l) {
+    response.fold((l)=> emit(state.copyWith(errorMessage: l.message)) , (r){
       final onTheAirTVSeries = refresh
-          ? l.results
-          : [...state.onTheAirTVSeries, ...l.results];
+          ? r.results
+          : [...state.onTheAirTVSeries, ...r.results];
       emit(
         state.copyWith(
           onTheAirTVSeries: onTheAirTVSeries,
           onTheAirIsLoading: false,
-          onTheAirHasReachedMax: _onTheAirCurrentPage >= l.totalPages,
+          onTheAirHasReachedMax: _onTheAirCurrentPage >= r.totalPages,
           errorMessage: null,
         ),
       );
       _onTheAirCurrentPage++;
-    }, (r) => emit(state.copyWith(errorMessage: r.message)));
+    } );
   }
 }

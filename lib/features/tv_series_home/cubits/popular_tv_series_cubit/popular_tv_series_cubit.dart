@@ -33,19 +33,19 @@ class PopularTVSeriesCubit extends Cubit<PopularTVSeriesStates> {
     final response = await _tVSeriesRepository.getPopularTVSeries(
       page: _popularCurrentPage,
     );
-    response.fold((l) {
+    response.fold((l) => emit(state.copyWith(errorMessage: l.message)), (r){
       final popularTVSeries = refresh
-          ? l.results
-          : [...state.popularTVSeries, ...l.results];
+          ? r.results
+          : [...state.popularTVSeries, ...r.results];
       emit(
         state.copyWith(
           popularTVSeries: popularTVSeries,
           popularIsLoading: false,
-          popularHasReachedMax: _popularCurrentPage >= l.totalPages,
+          popularHasReachedMax: _popularCurrentPage >= r.totalPages,
           errorMessage: null,
         ),
       );
       _popularCurrentPage++;
-    }, (r) => emit(state.copyWith(errorMessage: r.message)));
+    } );
   }
 }
