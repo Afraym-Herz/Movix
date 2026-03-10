@@ -7,12 +7,18 @@ class SectionWrapper extends StatelessWidget {
   final Widget child;
   final VoidCallback? onSeeAllTap;
 
-  const SectionWrapper({super.key, required this.title, required this.child,required this.onSeeAllTap});
+  const SectionWrapper({
+    super.key,
+    required this.title,
+    required this.child,
+    required this.onSeeAllTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -25,16 +31,16 @@ class SectionWrapper extends StatelessWidget {
                   context,
                 ).copyWith(color: Colors.white),
               ),
-               GestureDetector(
-                 onTap: onSeeAllTap,
-                 child: const Text(
+              InkWell(
+                onTap: onSeeAllTap,
+                child: const Text(
                   "See All",
                   style: TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
-                               ),
-               ),
+                ),
+              ),
             ],
           ),
         ),

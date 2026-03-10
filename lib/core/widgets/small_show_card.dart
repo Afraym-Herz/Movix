@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/models/movie_model.dart';
+import 'package:movix/core/widgets/app_network_image.dart';
 
 class SmallShowCard extends StatelessWidget {
   const SmallShowCard({
@@ -26,16 +27,10 @@ class SmallShowCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: show.fullPosterUrl != null
-                    ? Image.network(
-                        show.fullPosterUrl!,
+                    ? AppNetworkImage(
+                        imageUrl: show.fullPosterUrl,
+                        width: cardWidth ,
                         fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) =>
-                            loadingProgress == null
-                            ? child
-                            : const Center(child: CircularProgressIndicator()),
-                        errorBuilder: (_, __, ___) => const Center(
-                          child: Icon(Icons.broken_image_outlined, size: 48),
-                        ),
                       )
                     : const Center(child: Icon(Icons.movie_outlined, size: 48)),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/models/movie_model.dart';
+import 'package:movix/core/widgets/app_network_image.dart';
 
 class TrendingCard extends StatelessWidget {
   const TrendingCard({
@@ -14,7 +15,7 @@ class TrendingCard extends StatelessWidget {
   final Function() onTap;
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
@@ -29,18 +30,10 @@ class TrendingCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     movie.fullPosterUrl != null
-                        ? Image.network(
-                            movie.fullPosterUrl!,
+                        ? AppNetworkImage(
+                            imageUrl: movie.fullPosterUrl,
+                            width: width ,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => const Center(
-                              child: Icon(Icons.broken_image_outlined, size: 48),
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) =>
-                                loadingProgress == null
-                                    ? child
-                                    : const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
                           )
                         : const Center(
                             child: Icon(Icons.movie_outlined, size: 48),
