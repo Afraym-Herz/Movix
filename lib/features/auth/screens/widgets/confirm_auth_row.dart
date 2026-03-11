@@ -23,7 +23,7 @@ class ConfirmAuthRow extends StatelessWidget {
           style: AppTextStyles.regular12(context).copyWith(color: AppColors.greyColor),
         ),
         const SizedBox(width: 5),
-        GestureDetector(
+        InkWell(
           onTap: action,
           child: Text(actionText, style: AppTextStyles.medium12(context).copyWith(color: AppColors.primary)),
         ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/services/get_it_services.dart';
 import 'package:movix/core/widgets/background_image_stack.dart';
+import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
+import 'package:movix/features/auth/data/repo/auth_repo.dart';
 import 'package:movix/features/auth/screens/widgets/login_screen_body.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -9,11 +13,15 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       body: BackgroundImageStack(
-        child: LoginScreenBody(),
+        child: BlocProvider(
+          create: (context) => AuthCubit(
+            getIt.get<AuthRepo>(),
+          ),
+          child: const LoginScreenBody(),
+        ),
       ),
     );
   }
 }
-

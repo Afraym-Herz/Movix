@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/features/auth/screens/widgets/sign_up_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpContainer extends StatelessWidget {
   const SignUpContainer({super.key});
@@ -19,7 +18,7 @@ class SignUpContainer extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric( horizontal: 18 , vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
             child: Text(
               'Don’t have an account? Registration is managed externally through TMDB.',
               textAlign: TextAlign.center,
@@ -30,14 +29,18 @@ class SignUpContainer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-           SignUpButton(text: 'Create Account on TMDB', onPressed: () {
-            log( 'Create Account on TMDB');
-            },),
-           const SizedBox(height: 20,),
+          SignUpButton(
+            text: 'Create Account on TMDB',
+            onPressed: () async {
+              final Uri url = Uri.parse('https://www.themoviedb.org/signup');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                throw Exception('Could not launch $url');
+              }
+            },
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 }
-
-
