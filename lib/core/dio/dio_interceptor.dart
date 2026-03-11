@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 import 'package:movix/core/services/secure_storage.dart';
@@ -35,23 +34,5 @@ class DioInterceptor extends Interceptor {
     ResponseInterceptorHandler handler,
   ) {
     handler.next(response);
-  }
-
- 
-
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions, String accessToken) async {
-    return dio.request(
-      requestOptions.path,
-      data: requestOptions.data,
-      queryParameters: requestOptions.queryParameters,
-      options: Options(
-        method: requestOptions.method,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
   }
 }

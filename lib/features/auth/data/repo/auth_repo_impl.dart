@@ -49,12 +49,20 @@ class AuthRepoImpl extends AuthRepo {
         },
       );
 
-      var data = response.data;
-      final String requestToken = data['request_token'];
+      if (response.success) {
+        var data = response.data;
+        final String requestToken = data['request_token'];
+        
+        await secureStorage.setUserRequestToken(requestToken);
+        
+        return const Right(null);
+      
+      } else {
+        return const Left(
+          ServerFailure(message: 'Failed to validate with login'),
+        );
+      }
 
-      await secureStorage.setUserRequestToken(requestToken);
-
-      return const Right(null);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
@@ -65,7 +73,7 @@ class AuthRepoImpl extends AuthRepo {
     try {
       final response = await apiClient.post(
         ApiEndpoints.createSession,
-        data: {'request_token':  await secureStorage.getUserRequestToken()},
+        data: {'request_token': await secureStorage.getUserRequestToken()},
       );
 
       if (!response.success) {
@@ -132,7 +140,6 @@ class AuthRepoImpl extends AuthRepo {
       final validateResult = await validateWithLogin(
         email: email,
         password: password,
-
       );
       if (validateResult.isLeft()) {
         return Left(
@@ -156,11 +163,13 @@ class AuthRepoImpl extends AuthRepo {
 
       // Step 4: Get Account Details
       final sessionId = sessionResult.getOrElse(() => '');
-      final accountResult = await getAccountDetails(sessionId: sessionId.toString());
+      final accountResult = await getAccountDetails(
+        sessionId: sessionId.toString(),
+      );
 
       return accountResult.fold((failure) => Left(failure), (user) async {
-         await secureStorage.writeUserData(userModel: user);
-         await secureStorage.setUserId(user.id.toString());
+        await secureStorage.writeUserData(userModel: user);
+        await secureStorage.setUserId(user.id.toString());
         return Right(user);
       });
     } catch (e) {
@@ -194,10 +203,10 @@ class AuthRepoImpl extends AuthRepo {
   Future<Either<Failure, Unit>> logout({required String uId}) async {
     try {
       final sessionId = await secureStorage.getUserSessionId();
-final response = await apiClient.delete(
-  ApiEndpoints.logout,
-  data: {'session_id': sessionId},
-);
+      final response = await apiClient.delete(
+        ApiEndpoints.logout,
+        data: {'session_id': sessionId},
+      );
       if (!response.success) {
         return Left(
           ServerFailure(message: response.message ?? "Logout failed"),
