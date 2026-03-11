@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/assets.dart';
+import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
+import 'package:movix/features/auth/data/auth_cubit/auth_state.dart';
 import 'package:movix/features/auth/screens/login_screen.dart';
 import 'package:movix/features/auth/screens/widgets/custom_auth_button.dart';
+import 'package:movix/features/main_layout.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -40,34 +44,50 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FadeTransition(
-        opacity: fade,
-        child: ScaleTransition(
-          scale: scale,
-          child: Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Assets.imagesSplashImage),
-                    fit: BoxFit.fill,
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            Navigator.pushReplacementNamed(
+              context,
+              MainLayout.routeName,
+              arguments: state.user,
+            );
+          } else if (state is UnAuthenticated) {
+            Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+          }
+        },
+        builder: (context, state) {
+          return FadeTransition(
+            opacity: fade,
+            child: ScaleTransition(
+              scale: scale,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(Assets.imagesSplashImage),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    bottom: 70,
+                    left: 37.5,
+                    right: 37.5,
+                    child: CustomAuthButton(
+                      text: 'Get Started',
+                      isLoading: state is AuthLoading,
+                      onPressed: () {
+                        context.read<AuthCubit>().checkAuthenticationStatus();
+                      },
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 70,
-                left: 37.5,
-                right: 37.5,
-                child: CustomAuthButton(
-                  text: 'Get Started',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
