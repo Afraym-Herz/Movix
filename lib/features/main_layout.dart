@@ -22,7 +22,7 @@ class _MainLayoutState extends State<MainLayout> {
       selectedIndex = index;
     });
   }
-
+  
   List<Widget> pages = const [
     MovieBoxHomeScreen(),
     TVSeriesBoxHomeScreen(),
@@ -32,6 +32,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: AppColors.lightRedBackground,
       body: IndexedStack(index: selectedIndex, children: pages),
