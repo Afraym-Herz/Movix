@@ -4,7 +4,6 @@ import 'package:movix/core/utils/assets.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_state.dart';
 import 'package:movix/features/auth/screens/login_screen.dart';
-import 'package:movix/features/auth/screens/widgets/custom_auth_button.dart';
 import 'package:movix/features/main_layout.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,22 +22,26 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1300),
-    );
+     controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1300),
+  );
 
-    fade = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeIn));
+  fade = Tween<double>(begin: 0, end: 1).animate(
+    CurvedAnimation(parent: controller, curve: Curves.easeIn),
+  );
 
-    scale = Tween<double>(
-      begin: 0.7,
-      end: 1,
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutBack));
+  scale = Tween<double>(begin: 0.7, end: 1).animate(
+    CurvedAnimation(parent: controller, curve: Curves.easeOutBack),
+  );
 
-    controller.forward();
+  controller.forward();
+
+  controller.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      context.read<AuthCubit>().checkAuthenticationStatus();
+    }
+  });
   }
 
   @override
@@ -47,13 +50,18 @@ class _SplashScreenState extends State<SplashScreen>
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            Navigator.pushReplacementNamed(
+            Navigator.pushNamedAndRemoveUntil(
               context,
               MainLayout.routeName,
+              (route) => false, // ← removes ALL previous routes
               arguments: state.user,
             );
           } else if (state is UnAuthenticated) {
-            Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              LoginScreen.routeName,
+              (route) => false,
+            );
           }
         },
         builder: (context, state) {
@@ -69,18 +77,6 @@ class _SplashScreenState extends State<SplashScreen>
                         image: AssetImage(Assets.imagesSplashImage),
                         fit: BoxFit.fill,
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 70,
-                    left: 37.5,
-                    right: 37.5,
-                    child: CustomAuthButton(
-                      text: 'Get Started',
-                      isLoading: state is AuthLoading,
-                      onPressed: () {
-                        context.read<AuthCubit>().checkAuthenticationStatus();
-                      },
                     ),
                   ),
                 ],

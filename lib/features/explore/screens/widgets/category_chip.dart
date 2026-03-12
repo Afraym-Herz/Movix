@@ -14,7 +14,7 @@ class CategoryChip extends StatelessWidget {
   final Function() onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
