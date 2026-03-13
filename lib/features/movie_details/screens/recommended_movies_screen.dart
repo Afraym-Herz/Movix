@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
-import 'package:movix/features/home/screens/widgets/sliver_app_bar.dart';
-import 'package:movix/features/home/screens/widgets/grid_view_builder.dart';
+import 'package:movix/core/widgets/sliver_app_bar.dart';
+import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
 import 'package:movix/features/movie_details/cubits/recommendation_movies_cubit/cubit/recommendation_movies_cubit.dart';
 import 'package:movix/features/movie_details/cubits/recommendation_movies_cubit/cubit/recommendation_movies_state.dart';
 
@@ -46,7 +46,6 @@ class _RecommendedMoviesScreenState extends State<RecommendedMoviesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.lightRedBackground,
       body: BlocBuilder<RecommendationMoviesCubit, RecommendationMoviesState>(
@@ -68,17 +67,13 @@ class _RecommendedMoviesScreenState extends State<RecommendedMoviesScreen> {
             child: CustomScrollView(
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
-            
               slivers: [
                 buildSliverAppBar(context, title: "Recommended Movies"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
-            
-                SliverToBoxAdapter(
-                  child: GridViewBuilder(
-                    screenWidth: screenWidth,
-                    movies: state.recommendedMovies,
-                    isLoading: state.recommendedIsLoading,
-                  ),
+                SliverGridViewBuilder(
+                  screenWidth: MediaQuery.of(context).size.width,
+                  shows: state.recommendedMovies,
+                  isLoading: state.recommendedIsLoading,
                 ),
               ],
             ),

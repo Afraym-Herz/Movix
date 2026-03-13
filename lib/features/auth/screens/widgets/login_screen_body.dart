@@ -28,7 +28,7 @@ class LoginScreenBody extends StatefulWidget {
 
 class _LoginScreenBodyState extends State<LoginScreenBody>
     with KeyboardDismissMixin {
-  final Debouncer debouncer = Debouncer();
+  final Debouncer debouncer = Debouncer(milliseconds: 500);
   String username = '';
   String password = '';
   GlobalKey<FormState> formKey = GlobalKey<FormState>();

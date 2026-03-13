@@ -1,27 +1,27 @@
-// 1. Declare the timer at the class level
 import 'dart:async';
-class Debouncer {
-Timer? _debounceTimer;
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
 
- void onSearchChanged(String query) {
-  // 2. If the user types again, cancel the previous timer
-  if (_debounceTimer?.isActive ?? false) {
-    _debounceTimer?.cancel();
+class Debouncer {
+  final int milliseconds;
+  Timer? _timer;
+
+  Debouncer({required this.milliseconds});
+
+  void run(VoidCallback action) {
+    if (_timer != null) {
+      _timer?.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), () {
+      try {
+        action();
+      } catch (e) {
+        log('Error executing debounced action: $e');
+      }
+    });
   }
 
-  // 3. Start a new timer for 500ms (or your preferred delay)
-  _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-    // 4. This code only runs if 500ms pass without a new input
-    _performSearch(query);
-  });
+  void dispose() {
+    _timer?.cancel();
+  }
 }
-
-void _performSearch(String query) {
-  print('Searching for: $query');
-  // Trigger your API Call or Filter logic here
-}
-
-void dispose() {
-  // 5. Crucial: Always cancel the timer when the widget is destroyed
-  _debounceTimer?.cancel();
-}}

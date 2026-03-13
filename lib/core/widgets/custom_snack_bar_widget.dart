@@ -5,10 +5,10 @@ class CustomSnackbarWidget extends StatefulWidget {
   final VoidCallback onDismiss;
 
   const CustomSnackbarWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.onDismiss,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomSnackbarWidget> createState() => _CustomSnackbarWidgetState();

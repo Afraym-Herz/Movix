@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
-import 'package:movix/features/home/screens/top_rated_screen.dart';
-import 'package:movix/features/home/screens/widgets/custom_error_message_loading.dart';
-import 'package:movix/core/widgets/list_view_movies_screen.dart';
-import 'package:movix/features/home/screens/widgets/section_wrapper.dart';
+import 'package:movix/core/widgets/custom_error_message_loading.dart';
+import 'package:movix/core/widgets/list_view_shows_screen.dart';
+import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/movie_details/cubits/recommendation_movies_cubit/cubit/recommendation_movies_cubit.dart';
 import 'package:movix/features/movie_details/cubits/recommendation_movies_cubit/cubit/recommendation_movies_state.dart';
 import 'package:movix/features/movie_details/screens/recommended_movies_screen.dart';
@@ -100,10 +97,9 @@ class _RecommendedSectionState extends State<RecommendedSection> {
                           ).copyWith(color: Colors.white),
                         ),
                       )
-                    : ListViewMoviesScreens(
-                        scrollController: _scrollController,
+                    : ListViewShowsScreens(
                         cardWidth: cardWidth,
-                        movies: state.recommendedMovies,
+                        shows: state.recommendedMovies,
                         isTrending: false,
                         isRecommended: true,
                       );

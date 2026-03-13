@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/repositories/tv_series_repository.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_states.dart';
@@ -32,19 +30,22 @@ class TopRatedTVSeriesCubit extends Cubit<TopRatedTVSeriesStates> {
     final response = await _tvSeriesRepository.getTopRatedTVSeries(
       page: _topRatedCurrentPage,
     );
-    response.fold((l)=> emit(state.copyWith(errorMessage: l.message)) , (r){
-      final topRatedTVSeries = refresh
-          ? r.results
-          : [...state.topRatedTVSeries, ...r.results];
-      emit(
-        state.copyWith(
-          topRatedTVSeries: topRatedTVSeries,
-          topRatedIsLoading: false,
-          topRatedHasReachedMax: _topRatedCurrentPage >= r.totalPages,
-          errorMessage: null,
-        ),
-      );
-      _topRatedCurrentPage++;
-    } );
+    response.fold(
+      (l) => emit(state.copyWith(errorMessage: l.message, topRatedIsLoading: false)),
+      (r) {
+        final topRatedTVSeries = refresh
+            ? r.results
+            : [...state.topRatedTVSeries, ...r.results];
+        emit(
+          state.copyWith(
+            topRatedTVSeries: topRatedTVSeries,
+            topRatedIsLoading: false,
+            topRatedHasReachedMax: _topRatedCurrentPage >= r.totalPages,
+            errorMessage: null,
+          ),
+        );
+        _topRatedCurrentPage++;
+      },
+    );
   }
 }

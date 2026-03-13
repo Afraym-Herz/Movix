@@ -39,7 +39,7 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
         },
         (r) {
           emit(MovieDetailsState.loaded(state.movieDetails!));
-          return r.message;
+          return r.statusMessage;
         },
       );
 

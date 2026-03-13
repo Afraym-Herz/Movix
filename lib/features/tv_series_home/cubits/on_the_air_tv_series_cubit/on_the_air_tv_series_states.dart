@@ -1,7 +1,7 @@
-import 'package:movix/core/models/tv_series_model.dart';
+import 'package:movix/core/models/show_model.dart';
 
 class OnTheAirTvSeriesStates {
-  final List<TVSeriesModel> onTheAirTVSeries;
+  final List<ShowModel> onTheAirTVSeries;
   final bool onTheAirHasReachedMax;
   final bool onTheAirIsLoading;
   final String? errorMessage;
@@ -14,7 +14,7 @@ class OnTheAirTvSeriesStates {
   });
 
   OnTheAirTvSeriesStates copyWith({
-    List<TVSeriesModel>? onTheAirTVSeries,
+    List<ShowModel>? onTheAirTVSeries,
     
    
     bool? onTheAirHasReachedMax,

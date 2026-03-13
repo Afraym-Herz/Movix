@@ -31,10 +31,10 @@ abstract class TVSeriesRepository {
   });
 }
 
-class TVSerieRepositoryImpl implements TVSeriesRepository {
+class TVSeriesRepositoryImpl implements TVSeriesRepository {
   final ApiClient _apiClient;
 
-  TVSerieRepositoryImpl(this._apiClient);
+  TVSeriesRepositoryImpl(this._apiClient);
 
   @override
   Future<Either<Failure, ShowResponse>> getTopRatedTVSeries({

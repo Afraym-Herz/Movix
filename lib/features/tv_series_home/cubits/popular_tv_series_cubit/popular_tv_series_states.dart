@@ -1,7 +1,7 @@
-import 'package:movix/core/models/tv_series_model.dart';
+import 'package:movix/core/models/show_model.dart';
 
 class PopularTVSeriesStates {
-  final List<TVSeriesModel> popularTVSeries;
+  final List<ShowModel> popularTVSeries;
   final bool popularHasReachedMax;
   final bool popularIsLoading;
   final String? errorMessage;
@@ -14,7 +14,7 @@ class PopularTVSeriesStates {
   });
 
   PopularTVSeriesStates copyWith({
-    List<TVSeriesModel>? popularTVSeries,
+    List<ShowModel>? popularTVSeries,
     
    
     bool? popularHasReachedMax,

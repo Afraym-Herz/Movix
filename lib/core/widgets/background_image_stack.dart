@@ -12,7 +12,9 @@ class BackgroundImageStack extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const BackgroundImageContainer(),
+        BackgroundImageContainer(
+          child: child,
+        ),
         SafeArea(child:child),
       ],
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
-import 'package:movix/core/models/movie_model.dart';
+
 import 'package:movix/core/widgets/app_network_image.dart';
 
 class SmallShowCard extends StatelessWidget {

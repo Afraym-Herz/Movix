@@ -1,8 +1,8 @@
 
-import 'package:movix/features/home/models/movie.dart';
+import 'package:movix/core/models/show_model.dart';
 
 class RecommendationMoviesState {
-  final List<Movie> recommendedMovies;
+  final List<ShowModel> recommendedMovies;
   final bool recommendedHasReachedMax;
   final bool recommendedIsLoading;
   final String? errorMessage;
@@ -15,7 +15,7 @@ class RecommendationMoviesState {
   });
 
   RecommendationMoviesState copyWith({
-    List<Movie>? recommendedMovies,
+    List<ShowModel>? recommendedMovies,
     
     bool? recommendedHasReachedMax,
     

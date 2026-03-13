@@ -33,26 +33,35 @@ class RecommendationMoviesCubit extends Cubit<RecommendationMoviesState> {
     }
 
     try {
-      final response = await _moviesRepository.getRecommendedMovies(
+      final result = await _moviesRepository.getRecommendedMovies(
         movieId: movieId,
         page: _recommendedCurrentPage,
       );
 
-      final recommendedMovies = refresh
-          ? response.results
-          : [...state.recommendedMovies, ...response.results];
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            recommendedIsLoading: false,
+            errorMessage: failure.message,
+          ));
+        },
+        (showResponse) {
+          final recommendedMovies = refresh
+              ? showResponse.results
+              : [...state.recommendedMovies, ...showResponse.results];
 
-      emit(
-        state.copyWith(
-          recommendedMovies: recommendedMovies,
-          recommendedIsLoading: false,
-          recommendedHasReachedMax:
-          _recommendedCurrentPage >= response.totalPages,
-          errorMessage: null,
-        ),
+          emit(
+            state.copyWith(
+              recommendedMovies: recommendedMovies,
+              recommendedIsLoading: false,
+              recommendedHasReachedMax:
+                  _recommendedCurrentPage >= showResponse.totalPages,
+              errorMessage: null,
+            ),
+          );
+          _recommendedCurrentPage++;
+        },
       );
-
-      _recommendedCurrentPage++;
     } catch (e) {
       log('Error fetching recommended movies: $e');
       emit(
