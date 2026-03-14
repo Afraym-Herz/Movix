@@ -45,7 +45,7 @@ class ListViewShowsScreens extends StatelessWidget {
                     context,
                     isMovies
                         ? MovieDetailsScreen.routeName
-                        : TvSeriesDetailsScreen.routeName,
+                        : TVSeriesDetailsScreen.routeName,
                     arguments: show.id,
                   );
                 },
@@ -58,7 +58,7 @@ class ListViewShowsScreens extends StatelessWidget {
                     context,
                     isMovies
                         ? MovieDetailsScreen.routeName
-                        : TvSeriesDetailsScreen.routeName,
+                        : TVSeriesDetailsScreen.routeName,
                     arguments: show.id,
                   );
                 },

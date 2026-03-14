@@ -4,8 +4,8 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_cubit.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_states.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_states.dart';
 
 class AiringTodayTVSeriesScreen extends StatelessWidget {
   const AiringTodayTVSeriesScreen({super.key});
@@ -17,7 +17,7 @@ class AiringTodayTVSeriesScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.lightRedBackground,
-      body: BlocBuilder<AiringTVSeriesCubit, AiringTodayTVSeriesStates>(
+      body: BlocBuilder<AiringTodayTVSeriesCubit, AiringTodayTVSeriesStates>(
         builder: (context, state) {
           if (state.airingTodayIsLoading && state.airingTodayTVSeries.isEmpty) {
             return const Center(child: CircularProgressIndicator());
@@ -34,7 +34,7 @@ class AiringTodayTVSeriesScreen extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async => context
-                .read<AiringTVSeriesCubit>() .fetchAiringTodayTVSeries(refresh: true),
+                .read<AiringTodayTVSeriesCubit>() .fetchAiringTodayTVSeries(refresh: true),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
 
@@ -44,7 +44,7 @@ class AiringTodayTVSeriesScreen extends StatelessWidget {
 
                 PagginationWrapper(
                   onLoadMore: () => context
-                      .read<AiringTVSeriesCubit>()
+                      .read<AiringTodayTVSeriesCubit>()
                       .fetchAiringTodayTVSeries(),
                   child: SliverGridViewBuilder(
                     screenWidth: screenWidth,

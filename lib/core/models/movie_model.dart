@@ -26,7 +26,7 @@ class MovieModel extends ShowModel {
   });
 
   @override
-  String get displayTitle => title;
+  String get disPlayTitle => title;
 
   @override
   String? get displayDate => releaseDate;

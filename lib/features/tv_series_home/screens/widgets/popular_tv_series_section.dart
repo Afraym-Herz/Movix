@@ -7,6 +7,7 @@ import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/popular_tv_series_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PopularTVSeriesSection extends StatelessWidget {
   const PopularTVSeriesSection({super.key});
@@ -35,7 +36,15 @@ class PopularTVSeriesSection extends StatelessWidget {
         child: BlocBuilder<PopularTVSeriesCubit, PopularTVSeriesStates>(
           builder: (context, state) {
             if (state.popularIsLoading && state.popularTVSeries.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return Skeletonizer(
+                enabled: state.popularIsLoading,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: state.popularTVSeries,
+                  isTrending: false,
+                  isMovies: false,
+                ),
+              );
             }
 
             if (state.errorMessage != null && state.popularTVSeries.isEmpty) {
@@ -44,8 +53,8 @@ class PopularTVSeriesSection extends StatelessWidget {
                   errorMessage: state.errorMessage!,
                   onRefresh: () {
                     context.read<PopularTVSeriesCubit>().fetchPopularTVSeries(
-                      refresh: true,
-                    );
+                          refresh: true,
+                        );
                   },
                 ),
               );
@@ -58,7 +67,7 @@ class PopularTVSeriesSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.popularTVSeries,
                 isTrending: false,
-                isMovies: false ,
+                isMovies: false,
               ),
             );
           },
@@ -67,3 +76,4 @@ class PopularTVSeriesSection extends StatelessWidget {
     );
   }
 }
+

@@ -4,7 +4,7 @@ import 'package:movix/core/repositories/tv_series_repository.dart';
 import 'package:movix/core/services/get_it_services.dart';
 import 'package:movix/core/widgets/custom_divider.dart';
 import 'package:movix/core/widgets/header_home_screen.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_cubit.dart';
@@ -27,14 +27,12 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: BlocProvider(
               create: (context) =>
-                  AiringTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                  AiringTodayTVSeriesCubit(getIt.get<TVSeriesRepository>())
                     ..fetchAiringTodayTVSeries(),
               child: const AiringTodayTvSeriesSection(),
             ),
           ),
-
           const SliverToBoxAdapter(child: CustomDivider()),
-          
           SliverToBoxAdapter(
             child: BlocProvider(
               create: (context) =>
@@ -43,9 +41,7 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
               child: const PopularTVSeriesSection(),
             ),
           ),
-          
           const SliverToBoxAdapter(child: CustomDivider()),
-          
           SliverToBoxAdapter(
             child: BlocProvider(
               create: (context) =>
@@ -54,13 +50,11 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
               child: const TopRatedTVSeriesSection(),
             ),
           ),
-          
           const SliverToBoxAdapter(child: CustomDivider()),
-          
           SliverToBoxAdapter(
             child: BlocProvider(
               create: (context) =>
-                  OnTheAirTvSeriesCubit(getIt.get<TVSeriesRepository>())
+                  OnTheAirTVSeriesCubit(getIt.get<TVSeriesRepository>())
                     ..fetchOnTheAirTVSeries(),
               child: const OnTheAirTvSeriesSection(),
             ),
@@ -70,3 +64,4 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
     );
   }
 }
+

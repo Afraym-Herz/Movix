@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 
-SliverAppBar buildSliverAppBar(BuildContext context, {required String title}) {
+SliverAppBar buildSliverAppBar(BuildContext context , {required String title, bool isHome = false} ) {
   return SliverAppBar(
     centerTitle: true,
     floating: true,
@@ -16,7 +16,7 @@ SliverAppBar buildSliverAppBar(BuildContext context, {required String title}) {
       style: AppTextStyles.bold23(context).copyWith(color: Colors.white),
     ),
     backgroundColor: AppColors.lightRedBackground,
-    leading: IconButton(
+    leading: isHome ?null : IconButton(
       icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
       onPressed: () => Navigator.of(context).pop(),
     ),

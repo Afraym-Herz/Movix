@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/features/explore/screens/explore_screen.dart';
-import 'package:movix/features/movies_home/screens/movies_home_screen.dart';
+import 'package:movix/features/movies_home/screens/movie_box_home_screen.dart';
 import 'package:movix/features/saved_movies/screens/saved_movies_screen.dart';
 import 'package:movix/features/tv_series_home/screens/tv_series_box_home_screen.dart';
 

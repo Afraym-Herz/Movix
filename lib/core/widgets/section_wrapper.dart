@@ -11,7 +11,7 @@ class SectionWrapper extends StatelessWidget {
     super.key,
     required this.title,
     required this.child,
-    this.onSeeAllTap,
+    required this.onSeeAllTap,
   });
 
   @override

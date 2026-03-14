@@ -19,6 +19,7 @@ class ApiEndpoints {
   static const String requestToken = '/authentication/token/new';
 
   static const String search = '/find/';
+  static const String multiSearch = '/search/multi';
 
   static const String validateWithLogin =
       '/authentication/token/validate_with_login';
@@ -56,7 +57,7 @@ class ApiEndpoints {
 
   static String ratingMovies(int movieId) => '/movie/$movieId/rating';
 
-  static String ratingTvSeries(int tvId) => '/tv/$tvId/rating';
+  static String ratingTVSeries(int tvId) => '/tv/$tvId/rating';
 
   // ============== TV Series ENDPOINTS ==============
   static const String tvSeriesAiringToday = 'tv/airing_today';

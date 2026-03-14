@@ -4,17 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/repositories/tv_series_repository.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_states.dart';
 
-class OnTheAirTvSeriesCubit extends Cubit<OnTheAirTvSeriesStates> {
+class OnTheAirTVSeriesCubit extends Cubit<OnTheAirTVSeriesStates> {
   final TVSeriesRepository _tvSeriesRepository;
 
-  OnTheAirTvSeriesCubit(this._tvSeriesRepository)
-    : super(const OnTheAirTvSeriesStates());
+  OnTheAirTVSeriesCubit(this._tvSeriesRepository)
+    : super(const OnTheAirTVSeriesStates());
 
   int _onTheAirCurrentPage = 1;
 
   void reset() {
     _onTheAirCurrentPage = 1;
-    emit(const OnTheAirTvSeriesStates());
+    emit(const OnTheAirTVSeriesStates());
   }
 
   Future<void> fetchOnTheAirTVSeries({bool refresh = false}) async {
@@ -22,7 +22,7 @@ class OnTheAirTvSeriesCubit extends Cubit<OnTheAirTvSeriesStates> {
 
     if (refresh) {
       _onTheAirCurrentPage = 1;
-      emit(const OnTheAirTvSeriesStates(onTheAirIsLoading: true));
+      emit(const OnTheAirTVSeriesStates(onTheAirIsLoading: true));
     } else {
       if (state.onTheAirHasReachedMax) return;
       if (isClosed) return;

@@ -6,7 +6,7 @@ import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_states.dart';
-import 'package:movix/features/tv_series_home/screens/top_rated__tv_series_screen.dart';
+import 'package:movix/features/tv_series_home/screens/top_rated_tv_series_screen.dart';
 
 class TopRatedTVSeriesSection extends StatelessWidget {
   const TopRatedTVSeriesSection({super.key});
@@ -44,8 +44,8 @@ class TopRatedTVSeriesSection extends StatelessWidget {
                   errorMessage: state.errorMessage!,
                   onRefresh: () {
                     context.read<TopRatedTVSeriesCubit>().fetchTopRatedTVSeries(
-                      refresh: true,
-                    );
+                          refresh: true,
+                        );
                   },
                 ),
               );
@@ -58,7 +58,7 @@ class TopRatedTVSeriesSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.topRatedTVSeries,
                 isTrending: false,
-                isMovies: false ,
+                isMovies: false,
               ),
             );
           },
@@ -67,3 +67,4 @@ class TopRatedTVSeriesSection extends StatelessWidget {
     );
   }
 }
+

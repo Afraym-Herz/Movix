@@ -4,8 +4,8 @@ import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
-import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_cubit.dart';
-import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_states.dart';
+import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/latest_tv_series_screen.dart';
 
 class LatestTVSeriesSection extends StatelessWidget {
@@ -44,8 +44,8 @@ class LatestTVSeriesSection extends StatelessWidget {
                   errorMessage: state.errorMessage!,
                   onRefresh: () {
                     context.read<LatestTVSeriesCubit>().getLatestTVSeries(
-                      refresh: true,
-                    );
+                          refresh: true,
+                        );
                   },
                 ),
               );
@@ -58,7 +58,7 @@ class LatestTVSeriesSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.latestTVSeries,
                 isTrending: false,
-                isMovies: false ,
+                isMovies: false,
               ),
             );
           },
@@ -67,3 +67,4 @@ class LatestTVSeriesSection extends StatelessWidget {
     );
   }
 }
+

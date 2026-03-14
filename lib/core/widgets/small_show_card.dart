@@ -37,7 +37,7 @@ class SmallShowCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              show.displayTitle,
+              show.disPlayTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.bold14(

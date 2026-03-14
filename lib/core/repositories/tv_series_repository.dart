@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:movix/core/failure/failure.dart';
-import 'package:movix/core/models/show_response.dart';
 import 'package:movix/core/network/api_client.dart';
 import 'package:movix/core/network/api_endpoints.dart';
+import 'package:movix/core/models/tv_series_response.dart';
 
 abstract class TVSeriesRepository {
   Future<Either<Failure, ShowResponse>> getTopRatedTVSeries({
@@ -50,7 +50,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -74,7 +74,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -98,7 +98,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -123,7 +123,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -148,7 +148,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -172,7 +172,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(
@@ -196,7 +196,7 @@ class TVSeriesRepositoryImpl implements TVSeriesRepository {
     );
 
     if (response.success && response.data != null) {
-      return Right(ShowResponse.tvFromJson(response.data!));
+      return Right(ShowResponse.fromJson(response.data!));
     } else {
       return Left(
         ServerFailure(

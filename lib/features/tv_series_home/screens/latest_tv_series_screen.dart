@@ -4,8 +4,8 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
-import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_cubit.dart';
-import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_states.dart';
+import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_states.dart';
 
 class LatestTVSeriesScreen extends StatelessWidget {
   const LatestTVSeriesScreen({super.key});
@@ -41,7 +41,7 @@ class LatestTVSeriesScreen extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
 
               slivers: [
-                buildSliverAppBar(context, title: "Upcoming Movies"),
+                buildSliverAppBar(context, title: "Latest TV Series"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
                 PagginationWrapper(

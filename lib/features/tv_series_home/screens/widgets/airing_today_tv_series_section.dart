@@ -4,8 +4,8 @@ import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_cubit.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_states.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/airing_today_tv_series_screen.dart';
 
 class AiringTodayTvSeriesSection extends StatelessWidget {
@@ -18,7 +18,7 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
     final cardHeight = cardWidth * 1.5;
     return SectionWrapper(
       onSeeAllTap: () {
-        final airingTodayCubit = context.read<AiringTVSeriesCubit>();
+        final airingTodayCubit = context.read<AiringTodayTVSeriesCubit>();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -32,32 +32,36 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
       title: "Airing Today TVSeries",
       child: SizedBox(
         height: cardHeight + 20,
-        child: BlocBuilder<AiringTVSeriesCubit, AiringTodayTVSeriesStates>(
+        child: BlocBuilder<AiringTodayTVSeriesCubit, AiringTodayTVSeriesStates>(
           builder: (context, state) {
-            if (state.airingTodayIsLoading && state.airingTodayTVSeries.isEmpty) {
+            if (state.airingTodayIsLoading &&
+                state.airingTodayTVSeries.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (state.errorMessage != null && state.airingTodayTVSeries.isEmpty) {
+            if (state.errorMessage != null &&
+                state.airingTodayTVSeries.isEmpty) {
               return Center(
                 child: CustomErrorMessageLoading(
                   errorMessage: state.errorMessage!,
                   onRefresh: () {
-                    context.read<AiringTVSeriesCubit>() .fetchAiringTodayTVSeries( refresh: true,
-                    );
+                    context
+                        .read<AiringTodayTVSeriesCubit>()
+                        .fetchAiringTodayTVSeries(refresh: true);
                   },
                 ),
               );
             }
 
             return PagginationWrapper(
-              onLoadMore: () =>
-                  context.read<AiringTVSeriesCubit>().fetchAiringTodayTVSeries(),
+              onLoadMore: () => context
+                  .read<AiringTodayTVSeriesCubit>()
+                  .fetchAiringTodayTVSeries(),
               child: ListViewShowsScreens(
                 cardWidth: cardWidth,
                 shows: state.airingTodayTVSeries,
                 isTrending: false,
-                isMovies: false ,
+                isMovies: false,
               ),
             );
           },
@@ -66,3 +70,4 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
     );
   }
 }
+

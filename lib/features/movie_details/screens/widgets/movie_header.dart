@@ -60,12 +60,12 @@ class MovieDetailsScreenHeader extends StatelessWidget {
                 movieDetails.releaseDate!,
                 style: AppTextStyles.regular14(context).copyWith(color: Colors.white),
               ),
-              if (movieDetails.runtime != null) ...[
+              if (movieDetails.runtime > 0) ...[
                 const SizedBox(width: 16),
                 Icon(Icons.schedule, size: 16, color: Colors.grey[500]),
                 const SizedBox(width: 4),
                 Text(
-                  movieDetails.formattedRuntime!,
+                  movieDetails.formattedRuntime,
                   style: AppTextStyles.regular14(context).copyWith(color: Colors.white),
                 ),
               ],

@@ -1,19 +1,19 @@
 import 'package:movix/core/models/show_model.dart';
 
-class OnTheAirTvSeriesStates {
+class OnTheAirTVSeriesStates {
   final List<ShowModel> onTheAirTVSeries;
   final bool onTheAirHasReachedMax;
   final bool onTheAirIsLoading;
   final String? errorMessage;
 
-  const OnTheAirTvSeriesStates({
+  const OnTheAirTVSeriesStates({
     this.onTheAirTVSeries = const [],
     this.onTheAirHasReachedMax = false,
     this.onTheAirIsLoading = false,
     this.errorMessage,
   });
 
-  OnTheAirTvSeriesStates copyWith({
+  OnTheAirTVSeriesStates copyWith({
     List<ShowModel>? onTheAirTVSeries,
     
    
@@ -22,7 +22,7 @@ class OnTheAirTvSeriesStates {
     bool? onTheAirIsLoading,
     String? errorMessage,
   }) {
-    return OnTheAirTvSeriesStates(
+    return OnTheAirTVSeriesStates(
       onTheAirTVSeries: onTheAirTVSeries ?? this.onTheAirTVSeries,
       onTheAirHasReachedMax: onTheAirHasReachedMax ?? this.onTheAirHasReachedMax,
       onTheAirIsLoading: onTheAirIsLoading ?? this.onTheAirIsLoading,
@@ -32,7 +32,7 @@ class OnTheAirTvSeriesStates {
 
   @override
   String toString() {
-    return 'OnTheAirTvSeriesStates(onTheAirTVSeries: ${onTheAirTVSeries.length}, '
+    return 'OnTheAirTVSeriesStates(onTheAirTVSeries: ${onTheAirTVSeries.length}, '
         'onTheAirIsLoading: $onTheAirIsLoading, '
         'onTheAirHasReachedMax: $onTheAirHasReachedMax, '
         'errorMessage: $errorMessage)';

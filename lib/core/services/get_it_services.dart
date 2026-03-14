@@ -35,6 +35,7 @@ void setupGetIt() {
   );
 
   getIt.registerSingleton<TVSeriesDetailsRepository>(
-    TVSeriesDetailsRepositoryImpl(getIt<ApiClient>()),
+    TVSeriesDetailsRepositoryImpl(getIt<ApiClient>(), getIt<SecureStorage>()),
   );
 }
+

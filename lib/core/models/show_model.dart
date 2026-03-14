@@ -1,4 +1,6 @@
 
+
+
 abstract class ShowModel {
   final bool adult;
   final String? backdropPath;
@@ -24,7 +26,7 @@ abstract class ShowModel {
     required this.voteCount,
   });
 
-  String get displayTitle;
+  String get disPlayTitle;
   String? get displayDate;
   Map<String, dynamic> toJson();
 
@@ -36,5 +38,7 @@ abstract class ShowModel {
 
   String? get fullBackdropUrl => backdropPath != null
       ? 'https://image.tmdb.org/t/p/w1280$backdropPath' : null;
+
+
 
 }

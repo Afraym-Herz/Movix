@@ -29,7 +29,7 @@ class TVSeriesModel extends ShowModel {
 
   // ✅ Implement abstract getters
   @override
-  String get displayTitle => name;
+  String get disPlayTitle => name;
 
   @override
   String? get displayDate => firstAirDate;

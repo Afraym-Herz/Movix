@@ -14,15 +14,16 @@ class RecommendationMoviesCubit extends Cubit<RecommendationMoviesState> {
 
   void reset() {
     _recommendedCurrentPage = 1;
-    emit(const RecommendationMoviesState( ));
+    emit(const RecommendationMoviesState());
   }
 
   Future<void> fetchRecommendedMovies({
     required int movieId,
     bool refresh = false,
   }) async {
+    log(movieId.toString());
     if (state.recommendedIsLoading) return;
-
+    log(movieId.toString());
     if (refresh) {
       _recommendedCurrentPage = 1;
       emit(const RecommendationMoviesState(recommendedIsLoading: true));
@@ -32,41 +33,29 @@ class RecommendationMoviesCubit extends Cubit<RecommendationMoviesState> {
       emit(state.copyWith(recommendedIsLoading: true));
     }
 
-    try {
-      final result = await _moviesRepository.getRecommendedMovies(
-        movieId: movieId,
-        page: _recommendedCurrentPage,
-      );
-
-      result.fold(
-        (failure) {
-          emit(state.copyWith(
-            recommendedIsLoading: false,
-            errorMessage: failure.message,
-          ));
-        },
-        (showResponse) {
-          final recommendedMovies = refresh
-              ? showResponse.results
-              : [...state.recommendedMovies, ...showResponse.results];
-
-          emit(
-            state.copyWith(
-              recommendedMovies: recommendedMovies,
-              recommendedIsLoading: false,
-              recommendedHasReachedMax:
-                  _recommendedCurrentPage >= showResponse.totalPages,
-              errorMessage: null,
-            ),
-          );
-          _recommendedCurrentPage++;
-        },
-      );
-    } catch (e) {
-      log('Error fetching recommended movies: $e');
-      emit(
-        state.copyWith(recommendedIsLoading: false, errorMessage: e.toString()),
-      );
-    }
+    final response = await _moviesRepository.getRecommendedMovies(
+      movieId: movieId,
+      page: _recommendedCurrentPage,
+    );
+    
+    response.fold(
+      (l) => emit(
+        state.copyWith(
+          recommendedIsLoading: false,
+          recommendedHasReachedMax: true,
+          errorMessage: l.message,
+        ),
+      ),
+      (r) =>emit(
+        state.copyWith(
+          recommendedMovies: refresh
+              ? r.movies
+              : [...state.recommendedMovies, ...r.movies],
+          recommendedIsLoading: false,
+          recommendedHasReachedMax: _recommendedCurrentPage >= r.totalPages,
+          errorMessage: null,
+        ),
+      ), 
+    );
   }
 }

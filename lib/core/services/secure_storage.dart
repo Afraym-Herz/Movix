@@ -65,7 +65,7 @@ class SecureStorage {
   }
 
   Future<void> setUserRatingTVSeries(int tvSeriesId, double rateValue) async =>
-     await storage.write(key: 'tvSeries_rating_$tvSeriesId', value: rateValue.toString());
+     await storage.write(key: 'tv_series_rating_$tvSeriesId', value: rateValue.toString());
 
   Future<String?> getUserRatingTVSeries(int tvSeriesId) async {
     return storage.read(key: 'tvSeries_rating_$tvSeriesId');

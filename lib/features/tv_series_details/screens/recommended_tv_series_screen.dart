@@ -3,26 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
-import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_cubit.dart';
-import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_states.dart';
+import 'package:movix/features/tv_series_details/cubits/recommended_tv_series_cubit/recommended_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_details/cubits/recommended_tv_series_cubit/recommended_tv_series_states.dart';
 
-class OnTheAirScreen extends StatelessWidget {
-  const OnTheAirScreen({super.key});
-  static const String routeName = '/onTheAir-tv-series-screen';
+class RecommendedTVSeriesScreen extends StatelessWidget {
+  const RecommendedTVSeriesScreen({super.key, required this.tvSeriesId});
+
+  static const String routeName = '/recommended-tv-series-screen';
+  final int tvSeriesId;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.lightRedBackground,
-
-      body: BlocBuilder<OnTheAirTvSeriesCubit, OnTheAirTvSeriesStates>(
+      body: BlocBuilder<RecommendedTVSeriesCubit, RecommendedTVSeriesStates>(
         builder: (context, state) {
-          if (state.onTheAirIsLoading && state.onTheAirTVSeries.isEmpty) {
+          if (state.recommendedIsLoading && state.recommendedTVSeries.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (state.errorMessage != null && state.onTheAirTVSeries.isEmpty) {
+          if (state.errorMessage != null && state.recommendedTVSeries.isEmpty) {
             return Center(
               child: Text(
                 state.errorMessage!,
@@ -30,23 +31,23 @@ class OnTheAirScreen extends StatelessWidget {
               ),
             );
           }
-
           return RefreshIndicator(
             onRefresh: () async => context
-                .read<OnTheAirTvSeriesCubit>()
-                .fetchOnTheAirTVSeries(refresh: true),
+                .read<RecommendedTVSeriesCubit>()
+                .fetchRecommendedTVSeries(
+                  tvSeriesId: tvSeriesId,
+                  refresh: true,
+                ),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
-
               slivers: [
-                buildSliverAppBar(context, title: "onTheAir TVSeries"),
+                buildSliverAppBar(context, title: "Recommended TVSeries"),
                 const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
                 SliverGridViewBuilder(
                   screenWidth: screenWidth,
-                  shows: state.onTheAirTVSeries,
-                  isLoading: state.onTheAirIsLoading,
-                  isMovies:  false ,
+                  shows: state.recommendedTVSeries,
+                  isLoading: state.recommendedIsLoading,
+                  isMovies: false,
                 ),
               ],
             ),
@@ -56,3 +57,4 @@ class OnTheAirScreen extends StatelessWidget {
     );
   }
 }
+

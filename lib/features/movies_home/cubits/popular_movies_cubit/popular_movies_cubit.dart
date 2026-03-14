@@ -1,15 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movix/core/repositories/movie_repository.dart';
 import 'package:movix/features/movies_home/cubits/popular_movies_cubit/popular_movies_states.dart';
+import 'package:movix/core/repositories/movie_repository.dart';
+
 
 class PopularMoviesCubit extends Cubit<PopularMoviesStates> {
   final MovieRepository _movieRepository;
 
   PopularMoviesCubit(this._movieRepository) : super(const PopularMoviesStates());
-
-  int _popularCurrentPage = 1;
+  
+  int _popularCurrentPage = 1;  
 
   void reset() {
+    
     _popularCurrentPage = 1;
     emit(const PopularMoviesStates());
   }
@@ -26,23 +28,22 @@ class PopularMoviesCubit extends Cubit<PopularMoviesStates> {
       emit(state.copyWith(popularIsLoading: true));
     }
 
-    final result = await _movieRepository.getPopularMovies(page: _popularCurrentPage);
-    result.fold(
-      (failure) => emit(state.copyWith(popularIsLoading: false, errorMessage: failure.message)),
-      (response) {
-        final popularMovies = refresh
-            ? response.results
-            : [...state.popularMovies, ...response.results];
-        emit(
-          state.copyWith(
-            popularMovies: popularMovies,
-            popularIsLoading: false,
-            popularHasReachedMax: _popularCurrentPage >= response.totalPages,
-            errorMessage: null,
-          ),
-        );
-        _popularCurrentPage++;
-      },
+   final response = await _movieRepository.getPopularMovies(
+      page: _popularCurrentPage,
     );
+    response.fold((l) => emit(state.copyWith(errorMessage: l.message)) , (r){
+      final popularMovies = refresh
+          ? r.results
+          : [...state.popularMovies, ...r.results];
+      emit(
+        state.copyWith(
+          popularMovies: popularMovies,
+          popularIsLoading: false,
+          popularHasReachedMax: _popularCurrentPage >= r.totalPages,
+          errorMessage: null,
+        ),
+      );
+      _popularCurrentPage++;
+    });
   }
 }

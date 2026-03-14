@@ -57,15 +57,15 @@ class TVSeriesDetailsScreenHeader extends StatelessWidget {
               Icon(Icons.calendar_today, size: 16, color: Colors.grey[500]),
               const SizedBox(width: 4),
               Text(
-                tvSeriesDetails.lastAirDate!,
+                tvSeriesDetails.lastAirDate ?? tvSeriesDetails.firstAirDate ?? 'N/A',
                 style: AppTextStyles.regular14(context).copyWith(color: Colors.white),
               ),
-              if (tvSeriesDetails.episodeRunTime != null) ...[
+              if (tvSeriesDetails.episodeRunTime.isNotEmpty) ...[
                 const SizedBox(width: 16),
                 Icon(Icons.schedule, size: 16, color: Colors.grey[500]),
                 const SizedBox(width: 4),
                 Text(
-                  tvSeriesDetails.episodeRunTime.toString(),
+                  tvSeriesDetails.formattedEpisodeRunTime,
                   style: AppTextStyles.regular14(context).copyWith(color: Colors.white),
                 ),
               ],

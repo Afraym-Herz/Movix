@@ -6,7 +6,7 @@ import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_states.dart';
-import 'package:movix/features/tv_series_home/screens/on_the_air_screen.dart';
+import 'package:movix/features/tv_series_home/screens/on_the_air_tv_series_screen.dart';
 
 class OnTheAirTvSeriesSection extends StatelessWidget {
   const OnTheAirTvSeriesSection({super.key});
@@ -18,13 +18,13 @@ class OnTheAirTvSeriesSection extends StatelessWidget {
     final cardHeight = cardWidth * 1.5;
     return SectionWrapper(
       onSeeAllTap: () {
-        final onTheAirMoviesCubit = context.read<OnTheAirTvSeriesCubit>();
+        final onTheAirMoviesCubit = context.read<OnTheAirTVSeriesCubit>();
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(
               value: onTheAirMoviesCubit,
-              child: const OnTheAirScreen(),
+              child: const OnTheAirTVSeriesScreen(),
             ),
           ),
         );
@@ -32,7 +32,7 @@ class OnTheAirTvSeriesSection extends StatelessWidget {
       title: "On The Air TVSeries",
       child: SizedBox(
         height: cardHeight + 70,
-        child: BlocBuilder<OnTheAirTvSeriesCubit, OnTheAirTvSeriesStates>(
+        child: BlocBuilder<OnTheAirTVSeriesCubit, OnTheAirTVSeriesStates>(
           builder: (context, state) {
             if (state.onTheAirIsLoading && state.onTheAirTVSeries.isEmpty) {
               return const Center(child: CircularProgressIndicator());
@@ -43,9 +43,9 @@ class OnTheAirTvSeriesSection extends StatelessWidget {
                 child: CustomErrorMessageLoading(
                   errorMessage: state.errorMessage!,
                   onRefresh: () {
-                    context.read<OnTheAirTvSeriesCubit>().fetchOnTheAirTVSeries(
-                      refresh: true,
-                    );
+                    context.read<OnTheAirTVSeriesCubit>().fetchOnTheAirTVSeries(
+                          refresh: true,
+                        );
                   },
                 ),
               );
@@ -55,10 +55,10 @@ class OnTheAirTvSeriesSection extends StatelessWidget {
               child: ListViewShowsScreens(
                 cardWidth: cardWidth,
                 shows: state.onTheAirTVSeries,
-                isMovies: false ,
+                isMovies: false,
               ),
               onLoadMore: () =>
-                  context.read<OnTheAirTvSeriesCubit>().fetchOnTheAirTVSeries(),
+                  context.read<OnTheAirTVSeriesCubit>().fetchOnTheAirTVSeries(),
             );
           },
         ),
@@ -66,3 +66,4 @@ class OnTheAirTvSeriesSection extends StatelessWidget {
     );
   }
 }
+

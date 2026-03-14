@@ -36,9 +36,9 @@ class ProductionCompaniesRowMovie extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (company.fullLogoUrl != null)
+                  if (company.fullLogoPath != null)
                     Image.network(
-                      company.fullLogoUrl!,
+                      company.fullLogoPath!,
                       height: 20,
                       color:  Colors.white,
                       errorBuilder: (_, __, ___) => const SizedBox.shrink(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
+import 'package:movix/core/widgets/logo_box.dart';
 import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
 
 double getScaleFactor(BuildContext context) {
@@ -127,3 +128,70 @@ buildCustomSnackBar(BuildContext context, {required String message}) {
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+
+PreferredSizeWidget buildAppBar({
+  required BuildContext context,
+  required String userName,
+  required String imageUrl,
+  required VoidCallback onSearchTap,
+}) {
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(70),
+    child: SafeArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const LogoBox(),
+                const SizedBox(width: 8),
+                Text(
+                  'MOVIE',
+                  style: AppTextStyles.bold19(context).copyWith(
+                    color: Colors.white,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                Text(
+                  'X',
+                  style: AppTextStyles.bold19(context).copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: [
+                InkWell(
+                  onTap: onSearchTap, 
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(Icons.search, color: Colors.grey[400]),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  userName,
+                  style: AppTextStyles.regular14(context).copyWith(
+                    color: Colors.grey[400],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(imageUrl),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+

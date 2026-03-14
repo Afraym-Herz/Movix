@@ -1,24 +1,24 @@
-
 import 'package:movix/features/tv_series_details/models/tv_series_details_model.dart';
 
-class TVSeriesDetailsState {
+class TVSeriesDetailsStates {
   final TVSeriesDetailsModel? tvSeriesDetails;
   final bool isLoading;
   final String? errorMessage;
 
-  const TVSeriesDetailsState({
+  const TVSeriesDetailsStates({
     this.tvSeriesDetails,
     this.isLoading = false,
     this.errorMessage,
   });
 
-  const TVSeriesDetailsState.initial() : this();
+  const TVSeriesDetailsStates.initial() : this();
 
-  const TVSeriesDetailsState.loading() : this(isLoading: true);
+  const TVSeriesDetailsStates.loading() : this(isLoading: true);
 
-  const TVSeriesDetailsState.loaded(TVSeriesDetailsModel details)
+  const TVSeriesDetailsStates.loaded(TVSeriesDetailsModel details)
       : this(tvSeriesDetails: details, isLoading: false);
 
-  const TVSeriesDetailsState.error(String message)
+  const TVSeriesDetailsStates.error(String message)
       : this(errorMessage: message, isLoading: false);
 }
+

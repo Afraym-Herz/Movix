@@ -1,13 +1,11 @@
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/repositories/tv_series_repository.dart';
-import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_states.dart';
+import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_states.dart';
 
-class AiringTVSeriesCubit extends Cubit<AiringTodayTVSeriesStates> {
+class AiringTodayTVSeriesCubit extends Cubit<AiringTodayTVSeriesStates> {
   final TVSeriesRepository _tvSeriesRepository;
 
-  AiringTVSeriesCubit(this._tvSeriesRepository)
+  AiringTodayTVSeriesCubit(this._tvSeriesRepository)
     : super(const AiringTodayTVSeriesStates());
 
   int _airingTodayCurrentPage = 1;
@@ -29,13 +27,12 @@ class AiringTVSeriesCubit extends Cubit<AiringTodayTVSeriesStates> {
       emit(state.copyWith(airingTodayIsLoading: true));
     }
 
-   final response = await _tvSeriesRepository.getAiringTodayTVSeries(
+    final response = await _tvSeriesRepository.getAiringTodayTVSeries(
       page: _airingTodayCurrentPage,
     );
-    response.fold((l)=> emit(state.copyWith(errorMessage: l.message)) , (r){
-      final airingTodayTVSeries = refresh
-          ? r.results
-          : [...state.airingTodayTVSeries, ...r.results];
+    response.fold((l) => emit(state.copyWith(errorMessage: l.message)), (r) {
+      final airingTodayTVSeries =
+          refresh ? r.results : [...state.airingTodayTVSeries, ...r.results];
       emit(
         state.copyWith(
           airingTodayTVSeries: airingTodayTVSeries,
@@ -45,6 +42,7 @@ class AiringTVSeriesCubit extends Cubit<AiringTodayTVSeriesStates> {
         ),
       );
       _airingTodayCurrentPage++;
-    } );
+    });
   }
 }
+

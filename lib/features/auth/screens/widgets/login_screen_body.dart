@@ -126,12 +126,12 @@ class _LoginScreenBodyState extends State<LoginScreenBody>
                                       current is AuthFailure,
 
                                   builder: (context, state) => CustomAuthButton(
+                                    isLoading: state is AuthLoading,
                                     text: 'LogIn',
                                     onPressed: () {
                                       focusNode.unfocus();
                                       _submitForm();
                                     },
-                                    isLoading: state is AuthLoading,
                                   ),
                                 ),
                               ],
