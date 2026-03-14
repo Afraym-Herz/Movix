@@ -1,32 +1,35 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
+import 'package:movix/core/failure/failure.dart';
 import 'package:movix/core/network/api_client.dart';
 import 'package:movix/core/network/api_endpoints.dart';
 import 'package:movix/core/services/secure_storage.dart';
 import 'package:movix/features/movie_details/models/movie_details_model.dart';
-import 'package:movix/features/movie_details/models/rating_response.dart';
 
 abstract class MovieDetailsRepository {
-    Future<MovieDetailsModel> getMovieDetails(int movieId);
-  Future<Either<String, RatingResponse>> addMovieRating({
+  Future<MovieDetailsModel> getMovieDetails(int movieId);
+  Future<Either<Failure, String>> addMovieRating({
     required int movieId,
     required double rating,
   });
+
+  Future<Either<Failure, String>> removeMovieRating({required int movieId});
+
+  Future<String?> getMovieRating(int movieId);
 }
 
 class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   final ApiClient _apiClient;
+  final SecureStorage secureStorage;
 
-  MovieDetailsRepositoryImpl(this._apiClient, SecureStorage secureStorage);
+  MovieDetailsRepositoryImpl(this._apiClient, this.secureStorage);
 
- 
   @override
   Future<MovieDetailsModel> getMovieDetails(int movieId) async {
     final response = await _apiClient.get<Map<String, dynamic>>(
-      '/3/movie/$movieId',
-      queryParameters: {
-        'api_key': ApiEndpoints.apiKey,
-        'language': 'en-US',
-      },
+      ApiEndpoints.movieDetails(movieId),
+      queryParameters: {'api_key': ApiEndpoints.apiKey, 'language': 'en-US'},
     );
 
     if (response.success && response.data != null) {
@@ -37,22 +40,50 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
   }
 
   @override
-  Future<Either<String, RatingResponse>> addMovieRating({
+  Future<Either<Failure, String>> addMovieRating({
     required int movieId,
     required double rating,
   }) async {
     final response = await _apiClient.post<Map<String, dynamic>>(
-      '/3/movie/$movieId/rating',
+      ApiEndpoints.ratingMovies(movieId),
       data: {'value': rating},
-      queryParameters: {
-        'api_key': ApiEndpoints.apiKey,
-      },
+      queryParameters: {'api_key': ApiEndpoints.apiKey, 'language': 'en-US'},
     );
 
     if (response.success && response.data != null) {
-      return Right(RatingResponse.fromJson(response.data!));
+      log(" $rating is added ${response.data!['status_message']}");
+      secureStorage.setUserRatingMovie(movieId, rating);
+
+      return Right(response.data!['status_message']);
     } else {
-      return Left(response.message ?? 'Failed to add rating');
+      return Left(
+        ServerFailure(message: response.message ?? 'Failed to add rating'),
+      );
     }
   }
+
+  @override
+  Future<Either<Failure, String>> removeMovieRating({
+    required int movieId,
+  }) async {
+    final response = await _apiClient.delete<Map<String, dynamic>>(
+      ApiEndpoints.ratingMovies(movieId),
+      queryParameters: {'api_key': ApiEndpoints.apiKey, 'language': 'en-US'},
+    );
+
+    if (response.success && response.data != null) {
+      secureStorage.deleteUserRatingMovie(movieId);
+      return Right(response.data!['status_message']);
+    } else {
+      return Left(
+        ServerFailure(message: response.message ?? 'Failed to remove rating'),
+      );
+    }
+  }
+
+  @override
+  Future<String?> getMovieRating(int movieId) async {
+    return await secureStorage.getUserRatingMovie(movieId);
+  }
 }
+

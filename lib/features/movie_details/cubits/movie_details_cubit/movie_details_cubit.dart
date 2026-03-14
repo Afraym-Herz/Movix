@@ -23,33 +23,6 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     }
   }
 
-  Future<String> addMovieRating({
-    required int movieId,
-    required double rating,
-  }) async {
-    try {
-      final response = await _movieDetailsRepository.addMovieRating(
-        movieId: movieId,
-        rating: rating,
-      );
-      response.fold(
-        (l) {
-          emit(MovieDetailsState.error(l));
-          return l;
-        },
-        (r) {
-          emit(MovieDetailsState.loaded(state.movieDetails!));
-          return r.statusMessage;
-        },
-      );
-
-      return 'Add rating successfully';
-    } on Exception catch (e) {
-      emit(MovieDetailsState.error(e.toString()));
-      return 'un expected error';
-    }
-  }
-
   void reset() {
     emit(const MovieDetailsState.initial());
   }

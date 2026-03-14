@@ -1,7 +1,7 @@
-
 import 'package:movix/core/models/show_model.dart';
+import 'package:equatable/equatable.dart';
 
-class ExploreMoviesStates {
+class ExploreMoviesStates extends Equatable {
   final List<ShowModel> exploreMovies;
   final bool exploreIsLoading;
   final bool exploreHasReachedMax;
@@ -30,5 +30,23 @@ class ExploreMoviesStates {
       errorMessage: errorMessage ?? this.errorMessage,
       selectedCategory: selectedCategory ?? this.selectedCategory,
     );
+  }
+
+  @override
+  List<Object?> get props => [
+        exploreMovies,
+        exploreIsLoading,
+        exploreHasReachedMax,
+        errorMessage,
+        selectedCategory,
+      ];
+
+  @override
+  String toString() {
+    return 'ExploreMoviesStates(exploreMovies: ${exploreMovies.length}, '
+        'exploreIsLoading: $exploreIsLoading, '
+        'exploreHasReachedMax: $exploreHasReachedMax, '
+        'selectedCategory: $selectedCategory, '
+        'errorMessage: $errorMessage)';
   }
 }

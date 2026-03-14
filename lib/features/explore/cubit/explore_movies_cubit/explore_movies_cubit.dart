@@ -1,50 +1,64 @@
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movix/core/repositories/movie_repository.dart';
 import 'package:movix/features/explore/cubit/explore_movies_cubit/explore_movies_states.dart';
+import 'package:movix/core/repositories/movie_repository.dart';
 
 class ExploreMoviesCubit extends Cubit<ExploreMoviesStates> {
   final MovieRepository _movieRepository;
 
-  ExploreMoviesCubit(this._movieRepository) : super(const ExploreMoviesStates());
+  ExploreMoviesCubit(this._movieRepository)
+    : super(const ExploreMoviesStates());
+
+  int _exploreCurrentPage = 1;
+
+  void reset() {
+    _exploreCurrentPage = 1;
+    log('cubit reset');
+    emit(const ExploreMoviesStates());
+  }
 
   Future<void> fetchExploreMovies({
     bool refresh = false,
-    String? category,
+    required String category,
   }) async {
     if (state.exploreIsLoading) return;
 
-    emit(state.copyWith(
-      exploreIsLoading: true,
-      selectedCategory: category ?? state.selectedCategory,
-    ));
-
-    try {
-      // For now, just fetching popular movies as explore movies
-      // You might want to use a more specific method from repository
-      final result = await _movieRepository.getPopularMovies(page: 1);
-
-      result.fold(
-        (failure) {
-          emit(state.copyWith(
-            exploreIsLoading: false,
-            errorMessage: failure.message,
-          ));
-        },
-        (showResponse) {
-          emit(state.copyWith(
-            exploreMovies: showResponse.results,
-            exploreIsLoading: false,
-            exploreHasReachedMax: true,
-            errorMessage: null,
-          ));
-        },
+    if (refresh) {
+      _exploreCurrentPage = 1;
+      emit(
+        state.copyWith(
+          exploreIsLoading: true,
+          exploreMovies: [],
+          exploreHasReachedMax: false,
+          selectedCategory: category,
+        ),
       );
-    } catch (e) {
-      emit(state.copyWith(
-        exploreIsLoading: false,
-        errorMessage: e.toString(),
-      ));
+    } else {
+      if (state.exploreHasReachedMax || isClosed) return;
+      emit(state.copyWith(exploreIsLoading: true));
     }
+
+    final response = await _movieRepository.exploreMethod(
+      category: category,
+      page: _exploreCurrentPage,
+    );
+    response.fold(
+      (l) => emit(
+        state.copyWith(exploreIsLoading: false, errorMessage: l.message),
+      ),
+      (r) => emit(
+        state.copyWith(
+          exploreMovies: refresh
+              ? r.movies
+              : [...state.exploreMovies, ...r.movies],
+          exploreIsLoading: false,
+          exploreHasReachedMax: _exploreCurrentPage >= r.totalPages,
+          errorMessage: null,
+        ),
+      ),
+    );
+
+    _exploreCurrentPage++;
   }
 }
