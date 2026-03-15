@@ -20,48 +20,42 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(child: HeaderHomeScreen()),
-          SliverToBoxAdapter(
-            child: BlocProvider(
-              create: (context) =>
-                  AiringTodayTVSeriesCubit(getIt.get<TVSeriesRepository>())
-                    ..fetchAiringTodayTVSeries(),
-              child: const AiringTodayTvSeriesSection(),
-            ),
-          ),
-          const SliverToBoxAdapter(child: CustomDivider()),
-          SliverToBoxAdapter(
-            child: BlocProvider(
-              create: (context) =>
-                  PopularTVSeriesCubit(getIt.get<TVSeriesRepository>())
-                    ..fetchPopularTVSeries(),
-              child: const PopularTVSeriesSection(),
-            ),
-          ),
-          const SliverToBoxAdapter(child: CustomDivider()),
-          SliverToBoxAdapter(
-            child: BlocProvider(
-              create: (context) =>
-                  TopRatedTVSeriesCubit(getIt.get<TVSeriesRepository>())
-                    ..fetchTopRatedTVSeries(),
-              child: const TopRatedTVSeriesSection(),
-            ),
-          ),
-          const SliverToBoxAdapter(child: CustomDivider()),
-          SliverToBoxAdapter(
-            child: BlocProvider(
-              create: (context) =>
-                  OnTheAirTVSeriesCubit(getIt.get<TVSeriesRepository>())
-                    ..fetchOnTheAirTVSeries(),
-              child: const OnTheAirTvSeriesSection(),
-            ),
-          ),
-        ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              AiringTodayTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                ..fetchAiringTodayTVSeries(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PopularTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                ..fetchPopularTVSeries(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              TopRatedTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                ..fetchTopRatedTVSeries(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              OnTheAirTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                ..fetchOnTheAirTVSeries(),
+        ),
+      ],
+      child: const SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: AiringTodayTvSeriesSection()),
+            SliverToBoxAdapter(child: CustomDivider()),
+            SliverToBoxAdapter(child: PopularTVSeriesSection()),
+            SliverToBoxAdapter(child: CustomDivider()),
+            SliverToBoxAdapter(child: TopRatedTVSeriesSection()),
+            SliverToBoxAdapter(child: CustomDivider()),
+            SliverToBoxAdapter(child: OnTheAirTvSeriesSection()),
+          ],
+        ),
       ),
     );
   }
 }
-
