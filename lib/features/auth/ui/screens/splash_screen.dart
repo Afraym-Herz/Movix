@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/assets.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_state.dart';
-import 'package:movix/features/auth/screens/login_screen.dart';
+import 'package:movix/features/auth/ui/screens/login_screen.dart';
 import 'package:movix/features/main_layout.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,39 +22,44 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-     controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1300),
-  );
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1300),
+    );
 
-  fade = Tween<double>(begin: 0, end: 1).animate(
-    CurvedAnimation(parent: controller, curve: Curves.easeIn),
-  );
+    fade = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: controller, curve: Curves.easeIn),
+    );
 
-  scale = Tween<double>(begin: 0.7, end: 1).animate(
-    CurvedAnimation(parent: controller, curve: Curves.easeOutBack),
-  );
+    scale = Tween<double>(begin: 0.7, end: 1).animate(
+      CurvedAnimation(parent: controller, curve: Curves.easeOutBack),
+    );
 
-  controller.forward();
+    controller.forward();
 
-  controller.addStatusListener((status) {
-    if (status == AnimationStatus.completed) {
-      context.read<AuthCubit>().checkAuthenticationStatus();
-    }
-  });
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        context.read<AuthCubit>().checkAuthenticationStatus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose(); // ✅ dispose controller
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<AuthCubit, AuthState>(
+      body: BlocListener<AuthCubit, AuthState>( // ✅ BlocListener not BlocConsumer
         listener: (context, state) {
           if (state is Authenticated) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               MainLayout.routeName,
-              (route) => false, // ← removes ALL previous routes
-              arguments: state.user,
+              (route) => false,
             );
           } else if (state is UnAuthenticated) {
             Navigator.pushNamedAndRemoveUntil(
@@ -64,26 +69,20 @@ class _SplashScreenState extends State<SplashScreen>
             );
           }
         },
-        builder: (context, state) {
-          return FadeTransition(
-            opacity: fade,
-            child: ScaleTransition(
-              scale: scale,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(Assets.imagesSplashImage),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                ],
+        child: FadeTransition(
+          opacity: fade,
+          child: ScaleTransition(
+            scale: scale,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Assets.imagesSplashImage),
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

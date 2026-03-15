@@ -5,8 +5,8 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/utils/build_out_line_input_border.dart';
 import 'package:movix/core/utils/functions.dart';
-import 'package:movix/features/auth/screens/widgets/confirm_auth_row.dart';
-import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
+import 'package:movix/features/auth/ui/screens/widgets/confirm_auth_row.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_text_form_field.dart';
 
 class CustomPasswordFormField extends StatefulWidget {
   const CustomPasswordFormField({

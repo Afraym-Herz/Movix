@@ -4,7 +4,9 @@ import 'package:movix/core/services/get_it_services.dart';
 import 'package:movix/core/widgets/background_image_stack.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
 import 'package:movix/features/auth/data/repo/auth_repo.dart';
-import 'package:movix/features/auth/screens/widgets/login_screen_body.dart';
+import 'package:movix/features/auth/ui/screens/widgets/confirm_auth_row.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:movix/features/auth/ui/screens/widgets/login_screen_body.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
-import 'package:movix/features/auth/screens/widgets/sign_up_button.dart';
+import 'package:movix/features/auth/ui/screens/widgets/sign_up_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignUpContainer extends StatelessWidget {

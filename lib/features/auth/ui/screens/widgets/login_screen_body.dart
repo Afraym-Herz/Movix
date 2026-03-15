@@ -11,12 +11,12 @@ import 'package:movix/core/utils/form_auto_scroll_extension.dart';
 import 'package:movix/core/utils/no_over_scroll_indicator_behavior.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_state.dart';
-import 'package:movix/features/auth/screens/widgets/identifiy_and_secur_text_container.dart';
-import 'package:movix/features/auth/screens/widgets/or_divider_row.dart';
-import 'package:movix/features/auth/screens/widgets/custom_auth_button.dart';
-import 'package:movix/features/auth/screens/widgets/custom_password_from_field.dart';
-import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
-import 'package:movix/features/auth/screens/widgets/sign_up_container.dart';
+import 'package:movix/features/auth/ui/screens/widgets/identifiy_and_secur_text_container.dart';
+import 'package:movix/features/auth/ui/screens/widgets/or_divider_row.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_auth_button.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_password_from_field.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:movix/features/auth/ui/screens/widgets/sign_up_container.dart';
 import 'package:movix/features/main_layout.dart';
 
 class LoginScreenBody extends StatefulWidget {
