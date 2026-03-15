@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/services/get_it_services.dart';
-import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/on_generate_route.dart';
 import 'package:movix/features/auth/data/auth_cubit/auth_cubit.dart';
 import 'package:movix/features/auth/data/repo/auth_repo.dart';
-import 'package:movix/features/auth/screens/splash_screen.dart';
+import 'package:movix/features/auth/ui/screens/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupGetIt();
+
+  // ✅ Everything registered inside setupGetIt
+  await setupGetIt();
+
   runApp(const MyApp());
 }
 
@@ -19,14 +21,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit(
-        getIt.get<AuthRepo>(),
-      ),
+      // ✅ AuthCubit from GetIt — single instance
+      create: (_) => AuthCubit(getIt.get<AuthRepo>()),
       child: MaterialApp(
-        title: 'Movix',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        ),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: onGenerateRoute,
         initialRoute: SplashScreen.routeName,
@@ -37,7 +34,9 @@ class MyApp extends StatelessWidget {
               .clamp(1, 1.2)
               .toDouble();
           return MediaQuery(
-            data: mediaQueryData.copyWith(textScaler: TextScaler.linear(scale)),
+            data: mediaQueryData.copyWith(
+              textScaler: TextScaler.linear(scale),
+            ),
             child: child!,
           );
         },
