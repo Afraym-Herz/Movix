@@ -28,7 +28,7 @@ class ListViewShowsScreens extends StatelessWidget {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    final int itemCount = shows.length >= 12 ? 12 : shows.length;
+    final int itemCount = shows.length;
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       scrollDirection: Axis.horizontal,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/widgets/logo_box.dart';
-import 'package:movix/features/auth/screens/widgets/custom_text_form_field.dart';
+import 'package:movix/features/auth/ui/screens/widgets/custom_text_form_field.dart';
 
 double getScaleFactor(BuildContext context) {
   final double width = MediaQuery.of(context).size.width;
