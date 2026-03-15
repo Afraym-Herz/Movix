@@ -54,7 +54,7 @@ class TopRatedSection extends StatelessWidget {
                   context.read<TopRatedMoviesCubit>().fetchTopRatedMovies(),
               child: ListViewShowsScreens(
                 cardWidth: cardWidth,
-                shows: state.topRatedIsLoading ? [] : state.topRatedMovies,
+                shows: state.topRatedMovies,
                 isTrending: false,
               ),
             );

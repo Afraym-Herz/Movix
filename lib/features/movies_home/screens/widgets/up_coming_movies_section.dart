@@ -53,7 +53,7 @@ class UpComingSection extends StatelessWidget {
                   context.read<UpComingMoviesCubit>().fetchUpComingMovies(),
               child: ListViewShowsScreens(
                 cardWidth: cardWidth,
-                shows: state.upComingIsLoading ? [] : state.upComingMovies ,
+                shows: state.upComingMovies,
                 isTrending: false,
               ),
             );

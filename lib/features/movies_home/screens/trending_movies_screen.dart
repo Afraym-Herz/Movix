@@ -31,25 +31,25 @@ class TrendingMoviesScreen extends StatelessWidget {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async =>
-                context.read<TrendingMoviesCubit>().fetchTrendingMovies(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                buildSliverAppBar(context, title: "Trending Movies"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<TrendingMoviesCubit>()
-                      .fetchTrendingMovies(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<TrendingMoviesCubit>()
+                .fetchTrendingMovies(),
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<TrendingMoviesCubit>().fetchTrendingMovies(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Trending Movies"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.trendingMovies,
                     isLoading: state.trendingIsLoading,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

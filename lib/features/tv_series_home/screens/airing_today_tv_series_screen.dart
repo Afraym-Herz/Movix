@@ -32,28 +32,27 @@ class AiringTodayTVSeriesScreen extends StatelessWidget {
             );
           }
 
-          return RefreshIndicator(
-            onRefresh: () async => context
-                .read<AiringTodayTVSeriesCubit>() .fetchAiringTodayTVSeries(refresh: true),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-
-              slivers: [
-                buildSliverAppBar(context, title: "Airing Today TVSeries"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<AiringTodayTVSeriesCubit>()
-                      .fetchAiringTodayTVSeries(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<AiringTodayTVSeriesCubit>()
+                .fetchAiringTodayTVSeries(),
+            child: RefreshIndicator(
+              onRefresh: () async => context
+                  .read<AiringTodayTVSeriesCubit>()
+                  .fetchAiringTodayTVSeries(refresh: true),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Airing Today TVSeries"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.airingTodayTVSeries,
                     isLoading: state.airingTodayIsLoading,
                     isMovies: false,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

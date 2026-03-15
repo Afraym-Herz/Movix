@@ -52,7 +52,7 @@ class NowPlayingSection extends StatelessWidget {
                   context.read<NowPlayingMoviesCubit>().fetchNowPlayingMovies(),
               child: ListViewShowsScreens(
                 cardWidth: cardWidth,
-                shows: state.nowPlayingIsLoading ? [] : state.nowPlayingMovies,
+                shows: state.nowPlayingMovies,
                 isTrending: false,
               ),
             );

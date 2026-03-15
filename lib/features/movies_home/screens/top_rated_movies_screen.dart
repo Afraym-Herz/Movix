@@ -31,25 +31,25 @@ class TopRatedMoviesScreen extends StatelessWidget {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async =>
-                context.read<TopRatedMoviesCubit>().fetchTopRatedMovies(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                buildSliverAppBar(context, title: "Top Rated Movies"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<TopRatedMoviesCubit>()
-                      .fetchTopRatedMovies(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<TopRatedMoviesCubit>()
+                .fetchTopRatedMovies(),
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<TopRatedMoviesCubit>().fetchTopRatedMovies(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Top Rated Movies"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.topRatedMovies,
                     isLoading: state.topRatedIsLoading,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

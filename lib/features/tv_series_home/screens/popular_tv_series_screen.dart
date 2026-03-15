@@ -34,27 +34,25 @@ class PopularTVSeriesScreen extends StatelessWidget {
             );
           }
 
-          return RefreshIndicator(
-            onRefresh: () async =>
+          return PagginationWrapper(
+            onLoadMore: () =>
                 context.read<PopularTVSeriesCubit>().fetchPopularTVSeries(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-
-              slivers: [
-                buildSliverAppBar(context, title: "Popular TVSeries"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
-                PagginationWrapper(
-                  onLoadMore: () =>
-                      context.read<PopularTVSeriesCubit>().fetchPopularTVSeries(),
-                  child: SliverGridViewBuilder(
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<PopularTVSeriesCubit>().fetchPopularTVSeries(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Popular TVSeries"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.popularTVSeries,
                     isLoading: state.popularIsLoading,
-                    isMovies: false ,
+                    isMovies: false,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

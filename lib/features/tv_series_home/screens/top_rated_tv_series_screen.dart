@@ -31,28 +31,26 @@ class TopRatedTVSeriesScreen extends StatelessWidget {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async =>
-                context.read<TopRatedTVSeriesCubit>().fetchTopRatedTVSeries(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-
-              slivers: [
-                buildSliverAppBar(context, title: "Top Rated TVSeries"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<TopRatedTVSeriesCubit>()
-                      .fetchTopRatedTVSeries(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<TopRatedTVSeriesCubit>()
+                .fetchTopRatedTVSeries(),
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<TopRatedTVSeriesCubit>().fetchTopRatedTVSeries(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Top Rated TVSeries"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.topRatedTVSeries,
                     isLoading: state.topRatedIsLoading,
                     isMovies: false,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

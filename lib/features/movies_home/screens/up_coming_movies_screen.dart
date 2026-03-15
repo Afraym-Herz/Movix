@@ -31,25 +31,25 @@ class UpComingMoviesScreen extends StatelessWidget {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async =>
-                context.read<UpComingMoviesCubit>().fetchUpComingMovies(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                buildSliverAppBar(context, title: "Upcoming Movies"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<UpComingMoviesCubit>()
-                      .fetchUpComingMovies(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<UpComingMoviesCubit>()
+                .fetchUpComingMovies(),
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<UpComingMoviesCubit>().fetchUpComingMovies(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Upcoming Movies"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.upComingMovies,
                     isLoading: state.upComingIsLoading,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

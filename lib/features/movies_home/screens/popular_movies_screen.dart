@@ -31,25 +31,25 @@ class PopularMoviesScreen extends StatelessWidget {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: () async =>
-                context.read<PopularMoviesCubit>().fetchPopularMovies(),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                buildSliverAppBar(context, title: "Popular Movies"),
-                const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                PagginationWrapper(
-                  onLoadMore: () => context
-                      .read<PopularMoviesCubit>()
-                      .fetchPopularMovies(),
-                  child: SliverGridViewBuilder(
+          return PagginationWrapper(
+            onLoadMore: () => context
+                .read<PopularMoviesCubit>()
+                .fetchPopularMovies(),
+            child: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<PopularMoviesCubit>().fetchPopularMovies(),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  buildSliverAppBar(context, title: "Popular Movies"),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                  SliverGridViewBuilder(
                     screenWidth: screenWidth,
                     shows: state.popularMovies,
                     isLoading: state.popularIsLoading,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
