@@ -22,10 +22,13 @@ class RatingTVSeriesCubit extends Cubit<RatingTVSeriesStates> {
       ),
     );
 
+    // TMDB expects rating from 0.5 to 10.0. Our UI gives 1.0 to 5.0.
+    final tmdbRating = rating * 2;
+
     try {
       final response = await _tvSeriesDetailsRepository.addTVSeriesRating(
         tvSeriesId: tvSeriesId,
-        rating: 2 * rating,
+        rating: tmdbRating,
       );
       response.fold(
         (l) {
@@ -50,7 +53,7 @@ class RatingTVSeriesCubit extends Cubit<RatingTVSeriesStates> {
   Future<void> fetchTVSeriesRating(int tvSeriesId) async {
     final ratingValue = await _tvSeriesDetailsRepository.getTVSeriesRating(tvSeriesId);
     if (ratingValue != null) {
-      emit(state.copyWith(userRating: double.parse(ratingValue)));
+      emit(state.copyWith(userRating: double.parse(ratingValue) / 2));
     }
   }
 

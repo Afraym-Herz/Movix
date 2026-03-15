@@ -8,6 +8,7 @@ import 'package:movix/features/movie_details/cubits/movie_details_cubit/movie_de
 import 'package:movix/features/movie_details/cubits/rating_movie_cubit/rating_movie_cubit.dart';
 import 'package:movix/features/movie_details/cubits/recommendation_movies_cubit/cubit/recommendation_movies_cubit.dart';
 import 'package:movix/features/movie_details/repositories/movie_details_repository.dart';
+import 'package:movix/features/movie_details/screens/widgets/custom_movie_sliver_app_bar.dart';
 import 'package:movix/features/movie_details/screens/widgets/details_grid.dart';
 import 'package:movix/features/movie_details/screens/widgets/movie_genres.dart';
 import 'package:movix/features/movie_details/screens/widgets/movie_header.dart';
@@ -50,6 +51,9 @@ class MovieDetailsScreen extends StatelessWidget {
             if (movieDetails != null) {
               return CustomScrollView(
                 slivers: [
+                  CustomMovieSliverAppBar(
+                    fullBackdropUrl: movieDetails.fullBackdropUrl,
+                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),

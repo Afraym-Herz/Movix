@@ -48,20 +48,20 @@ class _RatingTVSeriesBuilderBarState extends State<RatingTVSeriesBuilderBar> {
       builder: (context, state) {
         return RatingBar.builder(
           initialRating: state.userRating ,
-          minRating: 1,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          unratedColor: Colors.grey,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) =>
-              const Icon(Icons.star, color: Colors.amber),
-          onRatingUpdate: (rating) {
-            context.read<RatingTVSeriesCubit>().submitRating(
-              tvSeriesId: widget.tvSeriesId,
-              rating: rating,
-            );
-          },
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              unratedColor: Colors.grey,
+              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) =>
+                  const Icon(Icons.star, color: Colors.amber),
+              onRatingUpdate: (rating) {
+                context.read<RatingTVSeriesCubit>().submitRating(
+                  tvSeriesId: widget.tvSeriesId,
+                  rating: rating,
+                );
+              },
         );
       },
     );

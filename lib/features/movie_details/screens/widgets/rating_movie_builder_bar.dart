@@ -60,7 +60,7 @@ class _RatingMovieBuilderBarState extends State<RatingMovieBuilderBar> {
           previous.isSubmitting != current.isSubmitting,
       builder: (context, state) {
         return RatingBar.builder(
-          initialRating: state.userRating / 2 == 0 ? 3 : state.userRating/2 ,
+          initialRating: state.userRating ,
           minRating: 1,
           direction: Axis.horizontal, 
           allowHalfRating: true,
