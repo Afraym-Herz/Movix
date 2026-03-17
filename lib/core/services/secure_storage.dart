@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movix/features/auth/data/models/user_model.dart';
+import 'package:movix/core/models/movie_model.dart';
+
 
 class SecureStorage {
   final FlutterSecureStorage storage;
@@ -12,6 +14,7 @@ class SecureStorage {
   static const String _sessionIdKey = 'session_id';
   static const String _userIdKey = 'user_id';
   static const String _userDataKey = 'user_data';
+  static const String _ratedItemsKey = 'rated_items';
 
   // ─── Request Token ───────────────────────────────
   Future<String?> getUserRequestToken() => storage.read(key: _requestTokenKey);
@@ -53,6 +56,45 @@ class SecureStorage {
     return usermodel.avatarPath!;
   }
 
+  // ─── Rated Items ────────────────────────────────
+  Future<void> saveRatedItem({required dynamic show, required double userRating}) async {
+    final ratedItems = await getRatedItems();
+    
+    // Remove if already exists
+    ratedItems.removeWhere((item) => item['show']['id'] == show.id);
+    
+    // Add new rating
+    ratedItems.insert(0, {
+      'show': show.toJson(),
+      'userRating': userRating,
+      'isMovie': show is MovieModel,
+    });
+
+    await storage.write(
+      key: _ratedItemsKey,
+      value: jsonEncode(ratedItems),
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getRatedItems() async {
+    final value = await storage.read(key: _ratedItemsKey);
+    if (value != null) {
+      final List<dynamic> decoded = jsonDecode(value);
+      return decoded.cast<Map<String, dynamic>>();
+    }
+    return [];
+  }
+
+  Future<void> deleteRatedItem(int showId) async {
+    final ratedItems = await getRatedItems();
+    ratedItems.removeWhere((item) => item['show']['id'] == showId);
+    await storage.write(
+      key: _ratedItemsKey,
+      value: jsonEncode(ratedItems),
+    );
+  }
+
+  // Legacy (Keep for compatibility if needed elsewhere, but ideally migrate)
   Future<void> setUserRatingMovie(int movieId, double rateValue) async =>
      await storage.write(key: 'movie_rating_$movieId', value: rateValue.toString());
 

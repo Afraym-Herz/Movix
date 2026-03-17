@@ -9,10 +9,13 @@ class SmallShowCard extends StatelessWidget {
     this.cardWidth,
     required this.show,
     required this.onTap,
+    this.userRating,
   });
   final double? cardWidth;
   final dynamic show;
   final VoidCallback onTap;
+  final double? userRating;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -29,7 +32,7 @@ class SmallShowCard extends StatelessWidget {
                 child: show.fullPosterUrl != null
                     ? AppNetworkImage(
                         imageUrl: show.fullPosterUrl,
-                        width: cardWidth ,
+                        width: cardWidth,
                         fit: BoxFit.cover,
                       )
                     : const Center(child: Icon(Icons.movie_outlined, size: 48)),
@@ -63,6 +66,26 @@ class SmallShowCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (userRating != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Text(
+                    'Your Rating: ',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  const Icon(Icons.star, color: Colors.blue, size: 12),
+                  const SizedBox(width: 2),
+                  Text(
+                    userRating!.toStringAsFixed(1),
+                    style: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),

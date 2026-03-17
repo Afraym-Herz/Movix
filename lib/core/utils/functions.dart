@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movix/core/models/movie_model.dart';
+import 'package:movix/core/models/tv_series_model.dart';
 import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/widgets/logo_box.dart';
@@ -195,3 +197,43 @@ PreferredSizeWidget buildAppBar({
   );
 }
 
+// In a constants file or inside ListViewShowsScreens
+final List<MovieModel> fakeMovies = List.generate(
+  6,
+  (index) => MovieModel(
+    id: index,
+    title: 'Loading Movie Title',
+    originalTitle: '',
+    releaseDate: '2024-01-01',
+    posterPath: '/fake.jpg',
+    backdropPath: null,
+    voteAverage: 7.5,
+    voteCount: 0,
+    popularity: 0,
+    overview: '',
+    adult: false,
+    video: false,
+    genreIds: [],
+    originalLanguage: '',
+  ),
+);
+
+final List<TVSeriesModel> fakeTvSeries = List.generate(
+  6,
+  (index) => TVSeriesModel(
+    id: index,
+    name: 'Loading TV Series Title',
+    originalName: '',
+    firstAirDate: '2024-01-01',
+    posterPath: '/fake.jpg',
+    backdropPath: null,
+    voteAverage: 7.5,
+    voteCount: 0,
+    popularity: 0,
+    overview: '',
+    adult: false,
+    genreIds: [],
+    originalLanguage: '',
+    originCountry: [],
+  ),
+);
