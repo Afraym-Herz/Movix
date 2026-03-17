@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/now_playing_movies_cubit/now_playing_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/now_playing_movies_cubit/now_playing_movies_states.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NowPlayingMoviesScreen extends StatelessWidget {
   const NowPlayingMoviesScreen({super.key});
@@ -20,7 +22,15 @@ class NowPlayingMoviesScreen extends StatelessWidget {
       body: BlocBuilder<NowPlayingMoviesCubit, NowPlayingMoviesStates>(
         builder: (context, state) {
           if (state.nowPlayingIsLoading && state.nowPlayingMovies.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: SliverGridViewBuilder(
+                screenWidth: screenWidth,
+                shows: fakeMovies,
+                isLoading: true,
+                isMovies: true,
+              ),
+            );
           }
 
           if (state.errorMessage != null && state.nowPlayingMovies.isEmpty) {

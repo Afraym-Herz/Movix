@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/popular_movies_cubit/popular_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/popular_movies_cubit/popular_movies_states.dart';
@@ -7,6 +8,7 @@ import 'package:movix/features/movies_home/screens/popular_movies_screen.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PopularSection extends StatelessWidget {
   const PopularSection({super.key});
@@ -34,10 +36,6 @@ class PopularSection extends StatelessWidget {
         height: cardHeight + 20,
         child: BlocBuilder<PopularMoviesCubit, PopularMoviesStates>(
           builder: (context, state) {
-            if (state.popularIsLoading && state.popularMovies.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             if (state.errorMessage != null && state.popularMovies.isEmpty) {
               return Center(
                 child: CustomErrorMessageLoading(
@@ -50,6 +48,17 @@ class PopularSection extends StatelessWidget {
                 ),
               );
             }
+             if (state.popularIsLoading && state.popularMovies.isEmpty) {
+              return Skeletonizer(
+                enabled: true,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeMovies,
+                  isLoading: true,
+                  isMovies: true,
+                ),
+              );
+            }
 
             return PagginationWrapper(
               onLoadMore: () =>
@@ -58,6 +67,7 @@ class PopularSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.popularMovies,
                 isTrending: false,
+                isLoading: state.popularIsLoading && state.popularMovies.isEmpty,
               ),
             );
           },

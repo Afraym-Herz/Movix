@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/up_coming_movies_cubit/up_coming_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/up_coming_movies_cubit/up_coming_movies_states.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UpComingMoviesScreen extends StatelessWidget {
   const UpComingMoviesScreen({super.key});
@@ -20,7 +22,15 @@ class UpComingMoviesScreen extends StatelessWidget {
       body: BlocBuilder<UpComingMoviesCubit, UpComingMoviesStates>(
         builder: (context, state) {
           if (state.upComingIsLoading && state.upComingMovies.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: SliverGridViewBuilder(
+                screenWidth: screenWidth,
+                shows: fakeMovies,
+                isLoading: true,
+                isMovies: true,
+              ),
+            );
           }
 
           if (state.errorMessage != null && state.upComingMovies.isEmpty) {

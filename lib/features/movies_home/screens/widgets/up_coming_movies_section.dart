@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/up_coming_movies_cubit/up_coming_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/up_coming_movies_cubit/up_coming_movies_states.dart';
@@ -7,6 +8,7 @@ import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/movies_home/screens/up_coming_movies_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UpComingSection extends StatelessWidget {
   const UpComingSection({super.key});
@@ -47,6 +49,17 @@ class UpComingSection extends StatelessWidget {
                 ),
               );
             }
+            if (state.upComingIsLoading && state.upComingMovies.isEmpty) {
+              return Skeletonizer(
+                enabled: true,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeMovies,
+                  isLoading: true,
+                  isMovies: true,
+                ),
+              );
+            }
 
             return PagginationWrapper(
               onLoadMore: () =>
@@ -55,6 +68,7 @@ class UpComingSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.upComingMovies,
                 isTrending: false,
+                isLoading: state.upComingIsLoading && state.upComingMovies.isEmpty,
               ),
             );
           },

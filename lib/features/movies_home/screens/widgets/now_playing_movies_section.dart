@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/now_playing_movies_cubit/now_playing_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/now_playing_movies_cubit/now_playing_movies_states.dart';
@@ -7,6 +8,7 @@ import 'package:movix/features/movies_home/screens/now_playing_movies_screen.dar
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class NowPlayingSection extends StatelessWidget {
   const NowPlayingSection({super.key});
@@ -47,6 +49,18 @@ class NowPlayingSection extends StatelessWidget {
               );
             }
 
+            if (state.nowPlayingIsLoading && state.nowPlayingMovies.isEmpty) {
+              return Skeletonizer(
+                enabled: true,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeMovies,
+                  isLoading: true,
+                  isMovies: true,
+                ),
+              );
+            }
+
             return PagginationWrapper(
               onLoadMore: () =>
                   context.read<NowPlayingMoviesCubit>().fetchNowPlayingMovies(),
@@ -54,6 +68,7 @@ class NowPlayingSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.nowPlayingMovies,
                 isTrending: false,
+                isLoading: state.nowPlayingIsLoading && state.nowPlayingMovies.isEmpty,
               ),
             );
           },

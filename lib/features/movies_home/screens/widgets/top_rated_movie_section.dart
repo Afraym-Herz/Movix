@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/features/movies_home/cubits/top_rated_movies_cubit/top_rated_movies_cubit.dart';
 import 'package:movix/features/movies_home/cubits/top_rated_movies_cubit/top_rated_movies_states.dart';
@@ -7,6 +8,7 @@ import 'package:movix/features/movies_home/screens/top_rated_movies_screen.dart'
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
 import 'package:movix/core/widgets/section_wrapper.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TopRatedSection extends StatelessWidget {
   const TopRatedSection({super.key});
@@ -48,7 +50,17 @@ class TopRatedSection extends StatelessWidget {
                 ),
               );
             }
-
+            if (state.topRatedIsLoading && state.topRatedMovies.isEmpty) {
+              return Skeletonizer(
+                enabled: true,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeMovies,
+                  isLoading: true,
+                  isMovies: true,
+                ),
+              );
+            }
             return PagginationWrapper(
               onLoadMore: () =>
                   context.read<TopRatedMoviesCubit>().fetchTopRatedMovies(),
@@ -56,6 +68,7 @@ class TopRatedSection extends StatelessWidget {
                 cardWidth: cardWidth,
                 shows: state.topRatedMovies,
                 isTrending: false,
+                isLoading: state.topRatedIsLoading && state.topRatedMovies.isEmpty,
               ),
             );
           },
