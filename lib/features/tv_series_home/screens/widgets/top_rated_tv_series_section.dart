@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
@@ -7,6 +8,7 @@ import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/top_rated_tv_series_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TopRatedTVSeriesSection extends StatelessWidget {
   const TopRatedTVSeriesSection({super.key});
@@ -34,10 +36,6 @@ class TopRatedTVSeriesSection extends StatelessWidget {
         height: cardHeight + 20,
         child: BlocBuilder<TopRatedTVSeriesCubit, TopRatedTVSeriesStates>(
           builder: (context, state) {
-            if (state.topRatedIsLoading && state.topRatedTVSeries.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             if (state.errorMessage != null && state.topRatedTVSeries.isEmpty) {
               return Center(
                 child: CustomErrorMessageLoading(
@@ -51,6 +49,18 @@ class TopRatedTVSeriesSection extends StatelessWidget {
               );
             }
 
+            if (state.topRatedIsLoading && state.topRatedTVSeries.isEmpty) {
+              return Skeletonizer(
+                enabled: state.topRatedIsLoading,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeTvSeries,
+                  isTrending: false,
+                  isMovies: false,
+                ),
+              );
+            }
+
             return PagginationWrapper(
               onLoadMore: () =>
                   context.read<TopRatedTVSeriesCubit>().fetchTopRatedTVSeries(),
@@ -59,6 +69,7 @@ class TopRatedTVSeriesSection extends StatelessWidget {
                 shows: state.topRatedTVSeries,
                 isTrending: false,
                 isMovies: false,
+                isLoading: state.topRatedIsLoading && state.topRatedTVSeries.isEmpty,
               ),
             );
           },

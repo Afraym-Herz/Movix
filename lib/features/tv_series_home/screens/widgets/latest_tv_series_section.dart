@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
@@ -7,6 +8,7 @@ import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/latest_tv_series_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LatestTVSeriesSection extends StatelessWidget {
   const LatestTVSeriesSection({super.key});
@@ -34,10 +36,6 @@ class LatestTVSeriesSection extends StatelessWidget {
         height: cardHeight + 20,
         child: BlocBuilder<LatestTVSeriesCubit, LatestTVSeriesStates>(
           builder: (context, state) {
-            if (state.latestTVSeriesIsLoading && state.latestTVSeries.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             if (state.errorMessage != null && state.latestTVSeries.isEmpty) {
               return Center(
                 child: CustomErrorMessageLoading(
@@ -51,6 +49,18 @@ class LatestTVSeriesSection extends StatelessWidget {
               );
             }
 
+            if (state.latestTVSeriesIsLoading && state.latestTVSeries.isEmpty) {
+              return Skeletonizer(
+                enabled: state.latestTVSeriesIsLoading,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeTvSeries,
+                  isTrending: false,
+                  isMovies: false,
+                ),
+              );
+            }
+
             return PagginationWrapper(
               onLoadMore: () =>
                   context.read<LatestTVSeriesCubit>().getLatestTVSeries(),
@@ -59,6 +69,7 @@ class LatestTVSeriesSection extends StatelessWidget {
                 shows: state.latestTVSeries,
                 isTrending: false,
                 isMovies: false,
+                isLoading: state.latestTVSeriesIsLoading && state.latestTVSeries.isEmpty,
               ),
             );
           },

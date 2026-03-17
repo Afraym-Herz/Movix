@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
@@ -7,6 +8,7 @@ import 'package:movix/core/widgets/section_wrapper.dart';
 import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/airing_today_tv_series_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class AiringTodayTvSeriesSection extends StatelessWidget {
   const AiringTodayTvSeriesSection({super.key});
@@ -34,11 +36,6 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
         height: cardHeight + 20,
         child: BlocBuilder<AiringTodayTVSeriesCubit, AiringTodayTVSeriesStates>(
           builder: (context, state) {
-            if (state.airingTodayIsLoading &&
-                state.airingTodayTVSeries.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             if (state.errorMessage != null &&
                 state.airingTodayTVSeries.isEmpty) {
               return Center(
@@ -53,6 +50,18 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
               );
             }
 
+            if (state.airingTodayIsLoading && state.airingTodayTVSeries.isEmpty) {
+              return Skeletonizer(
+                enabled: state.airingTodayIsLoading,
+                child: ListViewShowsScreens(
+                  cardWidth: cardWidth,
+                  shows: fakeTvSeries,
+                  isTrending: false,
+                  isMovies: false,
+                ),
+              );
+            }
+
             return PagginationWrapper(
               onLoadMore: () => context
                   .read<AiringTodayTVSeriesCubit>()
@@ -62,6 +71,8 @@ class AiringTodayTvSeriesSection extends StatelessWidget {
                 shows: state.airingTodayTVSeries,
                 isTrending: false,
                 isMovies: false,
+                isLoading: state.airingTodayIsLoading &&
+                    state.airingTodayTVSeries.isEmpty,
               ),
             );
           },

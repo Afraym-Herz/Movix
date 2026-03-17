@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/custom_error_message_loading.dart';
 import 'package:movix/core/widgets/list_view_shows_screen.dart';
@@ -8,6 +9,7 @@ import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/pop
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_states.dart';
 import 'package:movix/features/tv_series_home/screens/popular_tv_series_screen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
 
 class PopularTVSeriesSection extends StatelessWidget {
   const PopularTVSeriesSection({super.key});
@@ -40,7 +42,7 @@ class PopularTVSeriesSection extends StatelessWidget {
                 enabled: state.popularIsLoading,
                 child: ListViewShowsScreens(
                   cardWidth: cardWidth,
-                  shows: state.popularTVSeries,
+                  shows: fakeTvSeries,
                   isTrending: false,
                   isMovies: false,
                 ),
@@ -68,6 +70,7 @@ class PopularTVSeriesSection extends StatelessWidget {
                 shows: state.popularTVSeries,
                 isTrending: false,
                 isMovies: false,
+                isLoading: state.popularIsLoading && state.popularTVSeries.isEmpty,
               ),
             );
           },
