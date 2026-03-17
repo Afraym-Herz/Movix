@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/features/tv_series_details/repositories/tv_series_details_repository.dart';
+import 'package:movix/features/tv_series_details/models/tv_series_details_model.dart';
 part 'rating_tv_series_states.dart';
 
 class RatingTVSeriesCubit extends Cubit<RatingTVSeriesStates> {
@@ -9,7 +10,7 @@ class RatingTVSeriesCubit extends Cubit<RatingTVSeriesStates> {
     : super(const RatingTVSeriesStates());
 
   Future<void> submitRating({
-    required int tvSeriesId,
+    required TVSeriesDetailsModel tvSeries,
     required double rating,
   }) async {
     if (state.isSubmitting) return;
@@ -27,7 +28,7 @@ class RatingTVSeriesCubit extends Cubit<RatingTVSeriesStates> {
 
     try {
       final response = await _tvSeriesDetailsRepository.addTVSeriesRating(
-        tvSeriesId: tvSeriesId,
+        tvSeries: tvSeries,
         rating: tmdbRating,
       );
       response.fold(

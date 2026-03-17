@@ -20,12 +20,11 @@ class TVSeriesDetailsCubit extends Cubit<TVSeriesDetailsStates> {
   }
 
   Future<void> addTVSeriesRating({
-    required int tvSeriesId,
     required double rating,
   }) async {
     try {
       final response = await _tvSeriesDetailsRepository.addTVSeriesRating(
-        tvSeriesId: tvSeriesId,
+        tvSeries: state.tvSeriesDetails!,
         rating: rating,
       );
       response.fold(

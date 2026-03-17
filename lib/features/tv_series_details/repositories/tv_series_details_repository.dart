@@ -10,7 +10,7 @@ import 'package:movix/features/tv_series_details/models/tv_series_details_model.
 abstract class TVSeriesDetailsRepository {
   Future<Either<Failure, TVSeriesDetailsModel>> getTVSeriesDetails(int tvSeriesId);
   Future<Either<Failure, String>> addTVSeriesRating({
-    required int tvSeriesId,
+    required TVSeriesDetailsModel tvSeries,
     required double rating,
   });
 
@@ -47,19 +47,19 @@ class TVSeriesDetailsRepositoryImpl implements TVSeriesDetailsRepository {
 
   @override
   Future<Either<Failure, String>> addTVSeriesRating({
-    required int tvSeriesId,
+    required TVSeriesDetailsModel tvSeries,
     required double rating,
   }) async {
     final response = await _apiClient.post<Map<String, dynamic>>(
       // Note: This endpoint might need to be verified in ApiEndpoints
-      ApiEndpoints.ratingTVSeries(tvSeriesId), 
+      ApiEndpoints.ratingTVSeries(tvSeries.id), 
       data: {'value': rating},
       queryParameters: {'api_key': ApiEndpoints.apiKey, 'language': 'en-US'},
     );
 
     if (response.success && response.data != null) {
       log(" $rating is added ${response.data!['status_message']}");
-      secureStorage.setUserRatingTVSeries(tvSeriesId, rating);
+      await secureStorage.saveRatedItem(show: tvSeries, userRating: rating);
 
       return Right(response.data!['status_message']);
     } else {
@@ -80,7 +80,7 @@ class TVSeriesDetailsRepositoryImpl implements TVSeriesDetailsRepository {
     );
 
     if (response.success && response.data != null) {
-      secureStorage.deleteUserRatingTVSeries(tvSeriesId);
+      await secureStorage.deleteRatedItem(tvSeriesId);
       return Right(response.data!['status_message']);
     } else {
       return Left(

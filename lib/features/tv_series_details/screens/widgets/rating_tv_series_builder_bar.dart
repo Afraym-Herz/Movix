@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:movix/features/tv_series_details/models/tv_series_details_model.dart';
 import 'package:movix/features/tv_series_details/cubits/rating_tv_serie/rating_tv_series_cubit.dart';
 
 class RatingTVSeriesBuilderBar extends StatefulWidget {
-  const RatingTVSeriesBuilderBar({super.key, required this.tvSeriesId});
+  const RatingTVSeriesBuilderBar({super.key, required this.tvSeries});
 
-  final int tvSeriesId;
+  final TVSeriesDetailsModel tvSeries;
 
   @override
   State<RatingTVSeriesBuilderBar> createState() =>
@@ -16,7 +17,7 @@ class RatingTVSeriesBuilderBar extends StatefulWidget {
 class _RatingTVSeriesBuilderBarState extends State<RatingTVSeriesBuilderBar> {
   @override
   void initState() {
-    context.read<RatingTVSeriesCubit>().fetchTVSeriesRating(widget.tvSeriesId);
+    context.read<RatingTVSeriesCubit>().fetchTVSeriesRating(widget.tvSeries.id);
     super.initState();
   }
 
@@ -58,7 +59,7 @@ class _RatingTVSeriesBuilderBarState extends State<RatingTVSeriesBuilderBar> {
                   const Icon(Icons.star, color: Colors.amber),
               onRatingUpdate: (rating) {
                 context.read<RatingTVSeriesCubit>().submitRating(
-                  tvSeriesId: widget.tvSeriesId,
+                  tvSeries: widget.tvSeries,
                   rating: rating,
                 );
               },

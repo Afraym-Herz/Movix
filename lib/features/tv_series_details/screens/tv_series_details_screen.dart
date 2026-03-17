@@ -78,7 +78,7 @@ class TVSeriesDetailsScreen extends StatelessWidget {
                               getIt.get<TVSeriesDetailsRepository>(),
                             ),
                             child: RatingTVSeriesBuilderBar(
-                              tvSeriesId: tvSeriesId,
+                              tvSeries: state.tvSeriesDetails!,
                             ),
                           ),
                           const SizedBox(height: 16),
