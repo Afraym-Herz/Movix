@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
 import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_states.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class AiringTodayTVSeriesScreen extends StatelessWidget {
   const AiringTodayTVSeriesScreen({super.key});
@@ -20,7 +22,15 @@ class AiringTodayTVSeriesScreen extends StatelessWidget {
       body: BlocBuilder<AiringTodayTVSeriesCubit, AiringTodayTVSeriesStates>(
         builder: (context, state) {
           if (state.airingTodayIsLoading && state.airingTodayTVSeries.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return  Skeletonizer(
+              enabled: true,
+              child: SliverGridViewBuilder(
+                screenWidth: screenWidth,
+                shows: fakeTvSeries,
+                isLoading: true,
+                isMovies: false,
+              ),
+            );
           }
 
           if (state.errorMessage != null && state.airingTodayTVSeries.isEmpty) {

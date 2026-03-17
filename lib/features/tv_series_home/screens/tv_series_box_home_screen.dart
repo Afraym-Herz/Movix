@@ -5,10 +5,12 @@ import 'package:movix/core/services/get_it_services.dart';
 import 'package:movix/core/widgets/custom_divider.dart';
 import 'package:movix/core/widgets/header_home_screen.dart';
 import 'package:movix/features/tv_series_home/cubits/airing_today_cubit/airing_today_tv_series_cubit.dart';
+import 'package:movix/features/tv_series_home/cubits/latest_tv_series_cubit/latest_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/top_rated_tv_series_cubit/top_rated_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/screens/widgets/airing_today_tv_series_section.dart';
+import 'package:movix/features/tv_series_home/screens/widgets/latest_tv_series_section.dart';
 import 'package:movix/features/tv_series_home/screens/widgets/on_the_air_tv_series_section.dart';
 import 'package:movix/features/tv_series_home/screens/widgets/popular_tv_series_section.dart';
 import 'package:movix/features/tv_series_home/screens/widgets/top_rated_tv_series_section.dart';
@@ -42,6 +44,11 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
               OnTheAirTVSeriesCubit(getIt.get<TVSeriesRepository>())
                 ..fetchOnTheAirTVSeries(),
         ),
+        BlocProvider(
+          create: (context) =>
+              LatestTVSeriesCubit(getIt.get<TVSeriesRepository>())
+                ..getLatestTVSeries(),
+        ),
       ],
       child: const SafeArea(
         child: CustomScrollView(
@@ -53,6 +60,8 @@ class TVSeriesBoxHomeScreen extends StatelessWidget {
             SliverToBoxAdapter(child: TopRatedTVSeriesSection()),
             SliverToBoxAdapter(child: CustomDivider()),
             SliverToBoxAdapter(child: OnTheAirTvSeriesSection()),
+            SliverToBoxAdapter(child: CustomDivider()),
+            SliverToBoxAdapter(child: LatestTVSeriesSection()),
           ],
         ),
       ),

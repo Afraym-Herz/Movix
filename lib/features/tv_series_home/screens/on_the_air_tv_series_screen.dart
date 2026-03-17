@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_cubit.dart';
 import 'package:movix/features/tv_series_home/cubits/on_the_air_tv_series_cubit/on_the_air_tv_series_states.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class OnTheAirTVSeriesScreen extends StatelessWidget {
   const OnTheAirTVSeriesScreen({super.key});
@@ -19,7 +21,15 @@ class OnTheAirTVSeriesScreen extends StatelessWidget {
       body: BlocBuilder<OnTheAirTVSeriesCubit, OnTheAirTVSeriesStates>(
         builder: (context, state) {
           if (state.onTheAirIsLoading && state.onTheAirTVSeries.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: SliverGridViewBuilder(
+                screenWidth: screenWidth,
+                shows: fakeTvSeries,
+                isLoading: true,
+                isMovies: false,
+              ),
+            );
           }
 
           if (state.errorMessage != null && state.onTheAirTVSeries.isEmpty) {

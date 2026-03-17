@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movix/core/utils/app_colors.dart';
+import 'package:movix/core/utils/functions.dart';
 import 'package:movix/core/widgets/paggination_wrapper.dart';
 import 'package:movix/core/widgets/sliver_app_bar.dart';
 import 'package:movix/core/widgets/sliver_grid_view_builder.dart';
 import 'package:movix/features/tv_series_home/cubits/popular_tv_series_cubit/popular_tv_series_cubit.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../cubits/popular_tv_series_cubit/popular_tv_series_states.dart';
 
@@ -22,7 +24,15 @@ class PopularTVSeriesScreen extends StatelessWidget {
       body: BlocBuilder<PopularTVSeriesCubit, PopularTVSeriesStates>(
         builder: (context, state) {
           if (state.popularIsLoading && state.popularTVSeries.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: SliverGridViewBuilder(
+                screenWidth: screenWidth,
+                shows: fakeTvSeries,
+                isLoading: true,
+                isMovies: false,
+              ),
+            );
           }
 
           if (state.errorMessage != null && state.popularTVSeries.isEmpty) {
