@@ -7,7 +7,8 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/features/movie_details/screens/movie_details_screen.dart';
 import 'package:movix/features/tv_series_details/screens/tv_series_details_screen.dart';
 import 'package:movix/features/search/cubit/search_cubit.dart';
-import 'package:movix/features/search/screens/widgets/search_separated_screens.dart' hide SearchLoadedView;
+import 'package:movix/features/search/screens/widgets/search_separated_screens.dart'
+    hide SearchLoadedView;
 import 'package:movix/features/search/screens/widgets/search_loaded_view.dart';
 
 class SearchScreenBody extends StatefulWidget {
@@ -29,8 +30,6 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
     });
   }
 
-  
-
   @override
   void dispose() {
     searchController.dispose();
@@ -50,9 +49,13 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
           onChanged: (value) {
             searchCubit.searchMethod(showTitle: value);
           },
-          viewLeading: IconButton(onPressed: (){
-            Navigator.pop(context);
-          }, icon: const Icon(Icons.arrow_back) , color: Colors.white,) ,
+          viewLeading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.white,
+          ),
           dividerColor: const Color(0xFF2A2A2A),
           suggestionsBuilder: (context, controller) {
             return [
@@ -63,18 +66,18 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
                     SearchCubitInitial() => const SearchInitialView(),
                     SearchCubitLoading() => const SearchLoadingView(),
                     SearchCubitSuccess() => SearchLoadedView(
-                        results: state.shows!,
-                        onTap: (show) {
-                          controller.closeView('');
-                          _navigate(context, show);
-                        },
-                      ),
+                      results: state.shows!,
+                      onTap: (show) {
+                        controller.closeView('');
+                        _navigate(context, show);
+                      },
+                    ),
                     SearchCubitEmpty() => SearchEmptyView(
-                        query: controller.text,
-                      ),
+                      query: controller.text,
+                    ),
                     SearchCubitFailure() => SearchFailureView(
-                        message: state.errMessage,
-                      ),
+                      message: state.errMessage,
+                    ),
                     SearchCubitState() => const SizedBox.shrink(),
                   };
                 },
@@ -84,7 +87,6 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
         ),
       ),
     );
-    
   }
 
   void _navigate(BuildContext context, ShowModel show) {
@@ -102,5 +104,4 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
       );
     }
   }
-  
 }

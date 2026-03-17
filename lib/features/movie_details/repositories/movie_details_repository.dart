@@ -10,7 +10,7 @@ import 'package:movix/features/movie_details/models/movie_details_model.dart';
 abstract class MovieDetailsRepository {
   Future<MovieDetailsModel> getMovieDetails(int movieId);
   Future<Either<Failure, String>> addMovieRating({
-    required int movieId,
+    required MovieDetailsModel movie,
     required double rating,
   });
 
@@ -41,18 +41,18 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
 
   @override
   Future<Either<Failure, String>> addMovieRating({
-    required int movieId,
+    required MovieDetailsModel movie,
     required double rating,
   }) async {
     final response = await _apiClient.post<Map<String, dynamic>>(
-      ApiEndpoints.ratingMovies(movieId),
+      ApiEndpoints.ratingMovies(movie.id),
       data: {'value': rating},
       queryParameters: {'api_key': ApiEndpoints.apiKey, 'language': 'en-US'},
     );
 
     if (response.success && response.data != null) {
       log(" $rating is added ${response.data!['status_message']}");
-      secureStorage.setUserRatingMovie(movieId, rating);
+      await secureStorage.saveRatedItem(show: movie, userRating: rating);
 
       return Right(response.data!['status_message']);
     } else {
@@ -72,7 +72,7 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
     );
 
     if (response.success && response.data != null) {
-      secureStorage.deleteUserRatingMovie(movieId);
+      await secureStorage.deleteRatedItem(movieId);
       return Right(response.data!['status_message']);
     } else {
       return Left(

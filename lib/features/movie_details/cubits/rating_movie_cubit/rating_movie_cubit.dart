@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../repositories/movie_details_repository.dart';
+import 'package:movix/features/movie_details/models/movie_details_model.dart';
 part 'package:movix/features/movie_details/cubits/rating_movie_cubit/rating_movie_state.dart';
 
 class RatingMovieCubit extends Cubit<RatingMovieState> {
@@ -8,7 +9,7 @@ class RatingMovieCubit extends Cubit<RatingMovieState> {
 
   RatingMovieCubit( this._movieDetailsRepository) : super(const RatingMovieState.initial());
 
-  Future<String> submitRating(int movieId, double rating) async {
+  Future<String> submitRating(MovieDetailsModel movie, double rating) async {
     if (state.isSubmitting) return "Already submitting";
 
     emit(state.copyWith(isSubmitting: true));
@@ -17,7 +18,7 @@ class RatingMovieCubit extends Cubit<RatingMovieState> {
     final tmdbRating = rating * 2;
 
     final response = await _movieDetailsRepository.addMovieRating(
-      movieId: movieId,
+      movie: movie,
       rating: tmdbRating,
     );
 

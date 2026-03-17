@@ -80,7 +80,7 @@ class MovieDetailsScreen extends StatelessWidget {
                           BlocProvider(
                             create: (context) => RatingMovieCubit(getIt.get<MovieDetailsRepository>()) ,
                             child: RatingMovieBuilderBar(
-                              movieId: movieId
+                              movie: movieDetails
                             ),
                           ),
                           const SizedBox(height: 22),
