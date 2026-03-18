@@ -7,7 +7,6 @@ class MovieModel extends ShowModel {
   final bool video;
 
   const MovieModel({
-    // base
     required super.adult,
     super.backdropPath,
     required super.id,
@@ -18,7 +17,6 @@ class MovieModel extends ShowModel {
     required super.popularity,
     required super.voteAverage,
     required super.voteCount,
-    // movie specific
     required this.title,
     required this.originalTitle,
     this.releaseDate,

@@ -34,6 +34,7 @@ class TVSeriesDetailsRepositoryImpl implements TVSeriesDetailsRepository {
       );
 
       if (response.success && response.data != null) {
+        
         return Right(TVSeriesDetailsModel.fromJson(response.data!));
       } else {
         return Left(
@@ -58,7 +59,8 @@ class TVSeriesDetailsRepositoryImpl implements TVSeriesDetailsRepository {
     );
 
     if (response.success && response.data != null) {
-      log(" $rating is added ${response.data!['status_message']}");
+      log(" $rating is added to tv series ${response.data!['status_message']}");
+      await secureStorage.setUserRatingTVSeries(tvSeries.id, rating);
       await secureStorage.saveRatedItem(show: tvSeries, userRating: rating);
 
       return Right(response.data!['status_message']);

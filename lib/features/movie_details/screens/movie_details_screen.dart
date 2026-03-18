@@ -62,9 +62,7 @@ class MovieDetailsScreen extends StatelessWidget {
 
                         children: [
                           const SizedBox(height: 16),
-                          MovieDetailsScreenHeader(
-                            movieDetails: movieDetails,
-                          ),
+                          MovieDetailsScreenHeader(movieDetails: movieDetails),
                           const SizedBox(height: 16),
                           Align(
                             alignment: Alignment.centerLeft,
@@ -78,10 +76,10 @@ class MovieDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           BlocProvider(
-                            create: (context) => RatingMovieCubit(getIt.get<MovieDetailsRepository>()) ,
-                            child: RatingMovieBuilderBar(
-                              movie: movieDetails
+                            create: (context) => RatingMovieCubit(
+                              getIt.get<MovieDetailsRepository>(),
                             ),
+                            child: RatingMovieBuilderBar(movie: movieDetails),
                           ),
                           const SizedBox(height: 22),
                           MovieDetailsScreenDetailsGrid(

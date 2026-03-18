@@ -8,7 +8,6 @@ class TVSeriesModel extends ShowModel {
   final List<String> originCountry;
 
   const TVSeriesModel({
-    // base
     required super.adult,
     super.backdropPath,
     required super.id,
@@ -19,7 +18,6 @@ class TVSeriesModel extends ShowModel {
     required super.popularity,
     required super.voteAverage,
     required super.voteCount,
-    // tv specific
     required this.name,
     required this.originalName,
     this.firstAirDate,
@@ -42,8 +40,11 @@ class TVSeriesModel extends ShowModel {
       overview: json['overview'] as String? ?? '',
       posterPath: json['poster_path'] as String?,
       originalLanguage: json['original_language'] as String? ?? '',
-      genreIds: (json['genre_ids'] as List<dynamic>?)
-              ?.map((id) => id as int).toList() ?? [],
+      genreIds:
+          (json['genre_ids'] as List<dynamic>?)
+              ?.map((id) => id as int)
+              .toList() ??
+          [],
       popularity: (json['popularity'] as num?)?.toDouble() ?? 0,
       voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0,
       voteCount: json['vote_count'] as int? ?? 0,
@@ -51,8 +52,11 @@ class TVSeriesModel extends ShowModel {
       originalName: json['original_name'] as String? ?? '',
       firstAirDate: json['first_air_date'] as String?,
       mediaType: json['media_type'] as String?,
-      originCountry: (json['origin_country'] as List<dynamic>?)
-              ?.map((c) => c as String).toList() ?? [],
+      originCountry:
+          (json['origin_country'] as List<dynamic>?)
+              ?.map((c) => c as String)
+              .toList() ??
+          [],
     );
   }
 

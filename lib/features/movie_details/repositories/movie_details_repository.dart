@@ -37,7 +37,7 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
     } else {
       throw Exception(response.message ?? 'Failed to load movie details');
     }
-  }
+  }  
 
   @override
   Future<Either<Failure, String>> addMovieRating({
@@ -52,6 +52,7 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
 
     if (response.success && response.data != null) {
       log(" $rating is added ${response.data!['status_message']}");
+      await secureStorage.setUserRatingMovie(movie.id, rating);
       await secureStorage.saveRatedItem(show: movie, userRating: rating);
 
       return Right(response.data!['status_message']);
@@ -86,4 +87,4 @@ class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
     return await secureStorage.getUserRatingMovie(movieId);
   }
 }
-
+  
