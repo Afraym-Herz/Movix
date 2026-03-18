@@ -5,6 +5,7 @@ import 'package:movix/core/utils/app_colors.dart';
 import 'package:movix/core/utils/app_text_styles.dart';
 import 'package:movix/core/widgets/logo_box.dart';
 import 'package:movix/features/auth/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:movix/features/compare_movies/screens/compare_movies_screen.dart';
 
 double getScaleFactor(BuildContext context) {
   final double width = MediaQuery.of(context).size.width;
@@ -131,7 +132,6 @@ buildCustomSnackBar(BuildContext context, {required String message}) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-
 PreferredSizeWidget buildAppBar({
   required BuildContext context,
   required String userName,
@@ -152,36 +152,43 @@ PreferredSizeWidget buildAppBar({
                 const SizedBox(width: 8),
                 Text(
                   'MOVIE',
-                  style: AppTextStyles.bold19(context).copyWith(
-                    color: Colors.white,
-                    letterSpacing: 1.2,
-                  ),
+                  style: AppTextStyles.bold19(
+                    context,
+                  ).copyWith(color: Colors.white, letterSpacing: 1.2),
                 ),
                 Text(
                   'X',
-                  style: AppTextStyles.bold19(context).copyWith(
-                    color: AppColors.primary,
-                  ),
+                  style: AppTextStyles.bold19(
+                    context,
+                  ).copyWith(color: AppColors.primary),
                 ),
               ],
             ),
 
             Row(
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(
+                      context,
+                    ).pushNamed(CompareMoviesScreen.routeName);
+                  },
+                  icon: Icon(Icons.compare_arrows, color: Colors.grey[400]),
+                ),
                 InkWell(
-                  onTap: onSearchTap, 
+                  onTap: onSearchTap,
                   borderRadius: BorderRadius.circular(20),
                   child: Padding(
                     padding: const EdgeInsets.all(4),
                     child: Icon(Icons.search, color: Colors.grey[400]),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Text(
                   userName,
-                  style: AppTextStyles.regular14(context).copyWith(
-                    color: Colors.grey[400],
-                  ),
+                  style: AppTextStyles.regular14(
+                    context,
+                  ).copyWith(color: Colors.grey[400]),
                 ),
                 const SizedBox(width: 8),
                 CircleAvatar(

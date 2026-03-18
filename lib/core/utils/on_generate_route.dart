@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movix/core/utils/functions.dart';
 import 'package:movix/features/auth/ui/screens/login_screen.dart';
 import 'package:movix/features/auth/ui/screens/splash_screen.dart';
+import 'package:movix/features/compare_movies/screens/compare_movies_screen.dart';
 import 'package:movix/features/movies_home/screens/movie_box_home_screen.dart';
 import 'package:movix/features/movies_home/screens/now_playing_movies_screen.dart';
 import 'package:movix/features/movies_home/screens/popular_movies_screen.dart';
@@ -58,6 +59,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case TVSeriesDetailsScreen.routeName:
       return MaterialPageRoute(
         builder: (context) => const TVSeriesDetailsScreen(),
+        settings: settings,
+      );
+    case CompareMoviesScreen.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const CompareMoviesScreen(),
         settings: settings,
       );
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:movix/features/auth/data/models/user_model.dart';
 import 'package:movix/core/models/movie_model.dart';
@@ -99,7 +100,7 @@ class SecureStorage {
      await storage.write(key: 'movie_rating_$movieId', value: rateValue.toString());
 
   Future<String?> getUserRatingMovie(int movieId) async {
-    return storage.read(key: 'movie_rating_$movieId');
+    return await storage.read(key: 'movie_rating_$movieId');
   }
 
   Future<void> deleteUserRatingMovie(int movieId) async {
@@ -110,11 +111,11 @@ class SecureStorage {
      await storage.write(key: 'tv_series_rating_$tvSeriesId', value: rateValue.toString());
 
   Future<String?> getUserRatingTVSeries(int tvSeriesId) async {
-    return storage.read(key: 'tvSeries_rating_$tvSeriesId');
+    return await storage.read(key: 'tv_series_rating_$tvSeriesId');
   }
 
   Future<void> deleteUserRatingTVSeries(int tvSeriesId) async {
-    await storage.delete(key: 'tvSeries_rating_$tvSeriesId');
+    await storage.delete(key: 'tv_series_rating_$tvSeriesId');
   }
 
   Future<void> deleteUserData() async {
