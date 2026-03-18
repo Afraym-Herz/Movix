@@ -12,18 +12,22 @@ class RatingTVSeriesBuilderBar extends StatefulWidget {
   @override
   State<RatingTVSeriesBuilderBar> createState() =>
       _RatingTVSeriesBuilderBarState();
-}
+}  
 
 class _RatingTVSeriesBuilderBarState extends State<RatingTVSeriesBuilderBar> {
   @override
   void initState() {
-    context.read<RatingTVSeriesCubit>().fetchTVSeriesRating(widget.tvSeries.id);
     super.initState();
+    context.read<RatingTVSeriesCubit>().fetchTVSeriesRating(widget.tvSeries.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<RatingTVSeriesCubit, RatingTVSeriesStates>(
+      listenWhen: (previous, current) =>
+          previous.errorMessage != current.errorMessage ||
+          previous.successMessage != current.successMessage ||
+          previous.isSubmitting != current.isSubmitting,
       listener: (context, state) {
         if (state.isSubmitting) {
           ScaffoldMessenger.of(context)
@@ -47,22 +51,25 @@ class _RatingTVSeriesBuilderBarState extends State<RatingTVSeriesBuilderBar> {
           previous.userRating != current.userRating ||
           previous.isSubmitting != current.isSubmitting,
       builder: (context, state) {
-        return RatingBar.builder(
-          initialRating: state.userRating ,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              unratedColor: Colors.grey,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) =>
-                  const Icon(Icons.star, color: Colors.amber),
-              onRatingUpdate: (rating) {
-                context.read<RatingTVSeriesCubit>().submitRating(
-                  tvSeries: widget.tvSeries,
-                  rating: rating,
-                );
-              },
+        return KeyedSubtree(
+          key: ValueKey(state.userRating) ,
+          child: RatingBar.builder(
+            initialRating: state.userRating ,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                unratedColor: Colors.grey,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) =>
+                    const Icon(Icons.star, color: Colors.amber),
+                onRatingUpdate: (rating) {
+                  context.read<RatingTVSeriesCubit>().submitRating(
+                    tvSeries: widget.tvSeries,
+                    rating: rating,
+                  );
+                },
+          ),
         );
       },
     );

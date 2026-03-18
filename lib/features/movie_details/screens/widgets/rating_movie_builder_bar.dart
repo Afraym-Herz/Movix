@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -14,10 +16,12 @@ class RatingMovieBuilderBar extends StatefulWidget {
 }
 
 class _RatingMovieBuilderBarState extends State<RatingMovieBuilderBar> {
-  @override
+  
+  @override 
   void initState() {
-    context.read<RatingMovieCubit>().getMovieRating(widget.movie.id);
-    super.initState();
+     super.initState();
+     context.read<RatingMovieCubit>().getMovieRating(widget.movie.id);
+    
   }
 
   @override
@@ -58,22 +62,25 @@ class _RatingMovieBuilderBarState extends State<RatingMovieBuilderBar> {
           previous.userRating != current.userRating ||
           previous.isSubmitting != current.isSubmitting,
       builder: (context, state) {
-        return RatingBar.builder(
-          initialRating: state.userRating,
-          minRating: 1,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          unratedColor: Colors.grey,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) =>
-              const Icon(Icons.star, color: Colors.amber),
-          onRatingUpdate: (rating) {
-            context.read<RatingMovieCubit>().submitRating(
-                  widget.movie,
-                  rating,
-                );
-          },
+        return KeyedSubtree(
+          key: ValueKey(state.userRating),
+          child: RatingBar.builder(
+            initialRating: state.userRating,
+            minRating: 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            unratedColor: Colors.grey,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) =>
+                const Icon(Icons.star, color: Colors.amber),
+            onRatingUpdate: (rating) {
+              context.read<RatingMovieCubit>().submitRating(
+                    widget.movie,
+                    rating,
+                  );
+            },
+          ),
         );
       },
     );

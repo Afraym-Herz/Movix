@@ -9,7 +9,6 @@ import 'package:movix/features/auth/ui/screens/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Everything registered inside setupGetIt
   await setupGetIt();
 
   runApp(const MyApp());
@@ -21,7 +20,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // ✅ AuthCubit from GetIt — single instance
       create: (_) => AuthCubit(getIt.get<AuthRepo>()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

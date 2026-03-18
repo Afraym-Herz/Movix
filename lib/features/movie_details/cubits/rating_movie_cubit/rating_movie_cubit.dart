@@ -14,15 +14,15 @@ class RatingMovieCubit extends Cubit<RatingMovieState> {
 
     emit(state.copyWith(isSubmitting: true));
 
-    // TMDB expects rating from 0.5 to 10.0. Our UI gives 1.0 to 5.0.
     final tmdbRating = rating * 2;
 
-    final response = await _movieDetailsRepository.addMovieRating(
+    
+
+    try {
+      final response = await _movieDetailsRepository.addMovieRating(
       movie: movie,
       rating: tmdbRating,
     );
-
-    try {
       return response.fold(
         (l) {
           emit(state.copyWith(isSubmitting: false, errorMessage: l.message));
@@ -48,7 +48,12 @@ class RatingMovieCubit extends Cubit<RatingMovieState> {
 
   Future<void> getMovieRating(int movieId) async {
     final ratingValue = await _movieDetailsRepository.getMovieRating(movieId);
-    ratingValue != null ? emit(state.copyWith(userRating: double.parse(ratingValue)/2)) : emit(state);
+    if (ratingValue != null) {
+    final double? parsed = double.tryParse(ratingValue);
+    if (parsed != null) {
+      emit(state.copyWith(userRating: parsed / 2));
+    }
+  }
   }
 
   void clearMessages() {
